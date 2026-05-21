@@ -4,14 +4,15 @@
        https://developer.android.com/build/manage-manifests#inspect_the_merged_manifest_and_find_conflicts -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
    <uses-permission android:name="android.permission.INTERNET"/>
-   <application
-        android:label="Zulip"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:allowBackup="false"
-        android:fullBackupContent="@xml/full_backup_content"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        >
+    <application
+         android:label="Zulip"
+         android:name="${applicationName}"
+         android:icon="@mipmap/ic_launcher"
+         android:allowBackup="false"
+         android:fullBackupContent="@xml/full_backup_content"
+         android:dataExtractionRules="@xml/data_extraction_rules"
+         android:usesCleartextTraffic="true"
+         >
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -167,6 +167,11 @@ class ApiConnection {
       addAuth(request);
     }
 
+    final appCheckToken = await ZulipBinding.instance.getAppCheckToken();
+    if (appCheckToken != null) {
+      request.headers['X-Firebase-AppCheck'] = appCheckToken;
+    }
+
     if (overrideUserAgent != null) {
       request.headers['User-Agent'] = overrideUserAgent;
     } else {

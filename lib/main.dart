@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
+import 'firebase_options.dart';
 import 'licenses.dart';
 import 'log.dart';
 import 'model/binding.dart';
@@ -14,21 +17,32 @@ import 'widgets/share.dart';
 // ignore: unused_import
 import 'notifications/ios_service.dart';
 
-void main() {
-  mainInit();
+Future<void> main() async {
+  await mainInit();
   runApp(const ZulipApp());
 }
 
 /// Everything [main] does short of [runApp].
 ///
 /// This is useful for setup in Patrol-based integration tests.
-void mainInit() {
+Future<void> mainInit() async {
   assert(() {
     debugLogEnabled = true;
     return true;
   }());
   LicenseRegistry.addLicense(additionalLicenses);
   WidgetsFlutterBinding.ensureInitialized();
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: defaultTargetPlatform == TargetPlatform.android
+          ? kFirebaseOptionsAndroid
+          : kFirebaseOptionsIos,
+      );
+    }
+  } catch (e) {
+    debugLog('Firebase initialization already completed: $e');
+  }
   LiveZulipBinding.ensureInitialized();
   NotificationService.instance.start();
   ShareService.start();

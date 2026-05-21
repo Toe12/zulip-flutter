@@ -1,12 +1,16 @@
-package com.zulip.flutter
+package com.zulipmobile
 
 import android.content.Intent
+import com.zulip.flutter.AndroidIntentEventListener
+import com.zulip.flutter.AndroidIntentEventsStreamHandler
+import com.zulip.flutter.notifications.NotificationTapEventListener
+import com.zulip.flutter.notifications.NotificationTapEventsStreamHandler
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 
 class MainActivity : FlutterActivity() {
   private var androidIntentEventListener: AndroidIntentEventListener? = null
-  // private var notificationTapEventListener: NotificationTapEventListener? = null
+  private var notificationTapEventListener: NotificationTapEventListener? = null
 
   override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)
@@ -15,10 +19,10 @@ class MainActivity : FlutterActivity() {
     AndroidIntentEventsStreamHandler.register(
       flutterEngine.dartExecutor.binaryMessenger, androidIntentEventListener!!
     )
-    // notificationTapEventListener = NotificationTapEventListener()
-    // NotificationTapEventsStreamHandler.register(
-    //   flutterEngine.dartExecutor.binaryMessenger, notificationTapEventListener!!
-    // )
+    notificationTapEventListener = NotificationTapEventListener()
+    NotificationTapEventsStreamHandler.register(
+      flutterEngine.dartExecutor.binaryMessenger, notificationTapEventListener!!
+    )
 
     maybeHandleIntent(intent)
   }
@@ -41,10 +45,10 @@ class MainActivity : FlutterActivity() {
       }
 
       Intent.ACTION_VIEW -> {
-        // if (notificationTapEventListener!!.maybeHandleViewIntent(intent)) {
-        //   // Notification tapped
-        //   return true
-        // }
+        if (notificationTapEventListener!!.maybeHandleViewIntent(intent)) {
+          // Notification tapped
+          return true
+        }
 
         // Let Flutter handle other intents, in particular the web-auth intents
         // have ACTION_VIEW, scheme "zulip", and authority "login".

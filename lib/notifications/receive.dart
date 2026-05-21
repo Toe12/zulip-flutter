@@ -70,6 +70,7 @@ class NotificationService {
       case TargetPlatform.android:
         await ZulipBinding.instance.firebaseInitializeApp(
           options: kFirebaseOptionsAndroid);
+        await ZulipBinding.instance.firebaseInitializeAppCheck();
 
         await NotificationDisplayManager.init();
         ZulipBinding.instance.firebaseMessagingOnMessage
@@ -94,6 +95,7 @@ class NotificationService {
       case TargetPlatform.iOS: // TODO(#324): defer requesting notif permission
         await ZulipBinding.instance.firebaseInitializeApp(
           options: kFirebaseOptionsIos);
+        await ZulipBinding.instance.firebaseInitializeAppCheck();
 
         if (!await _requestPermission()) {
           // TODO(#324): request only "provisional" permission at this stage:
@@ -130,13 +132,18 @@ class NotificationService {
   }
 
   Future<void> _getFcmToken() async {
-    final value = await ZulipBinding.instance.firebaseMessaging.getToken();
-    // TODO(#323) warn user if getToken returns null, or doesn't timely return
-    assert(debugLog("notif FCM token: $value"));
-    // The call to `getToken` won't cause `onTokenRefresh` to fire if we
-    // already have a token from a previous run of the app.
-    // So we need to use the `getToken` return value.
-    token.value = value;
+    try {
+      final value = await ZulipBinding.instance.firebaseMessaging.getToken();
+      // TODO(#323) warn user if getToken returns null, or doesn't timely return
+      assert(debugLog("notif FCM token: $value"));
+      // The call to `getToken` won't cause `onTokenRefresh` to fire if we
+      // already have a token from a previous run of the app.
+      // So we need to use the `getToken` return value.
+      token.value = value;
+    } catch (e, st) {
+      assert(debugLog('notif FCM getToken failed: $e\n$st'));
+      token.value = null;
+    }
   }
 
   Future<void> _getApnsToken() async {

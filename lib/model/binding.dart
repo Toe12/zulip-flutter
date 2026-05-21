@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart' as device_info_plus;
 import 'package:file_picker/file_picker.dart' as file_picker;
 import 'package:firebase_core/firebase_core.dart' as firebase_core;
 import 'package:firebase_messaging/firebase_messaging.dart' as firebase_messaging;
+import 'package:firebase_app_check/firebase_app_check.dart' as firebase_app_check;
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
 import 'package:package_info_plus/package_info_plus.dart' as package_info_plus;
@@ -179,6 +180,12 @@ abstract class ZulipBinding {
   /// This wraps [firebase_core.Firebase.initializeApp].
   Future<void> firebaseInitializeApp({
       required firebase_core.FirebaseOptions options});
+
+  /// Initialize Firebase App Check.
+  Future<void> firebaseInitializeAppCheck();
+
+  /// Get the current App Check token.
+  Future<String?> getAppCheckToken();
 
   /// Wraps [firebase_messaging.FirebaseMessaging.instance].
   firebase_messaging.FirebaseMessaging get firebaseMessaging;
@@ -381,6 +388,8 @@ class NotificationPigeonApi {
 /// Methods wrapping a plugin, like [launchUrl], invoke the actual
 /// underlying plugin method.
 class LiveZulipBinding extends ZulipBinding {
+  bool appCheckInitialized = false;
+
   LiveZulipBinding() {
     _deviceInfo = _prefetchDeviceInfo();
     _packageInfo = _prefetchPackageInfo();
@@ -436,10 +445,35 @@ class LiveZulipBinding extends ZulipBinding {
   Future<bool> supportsCloseForLaunchMode(url_launcher.LaunchMode mode) async {
     return url_launcher.supportsCloseForLaunchMode(mode);
   }
-
+  
   @override
   Future<void> closeInAppWebView() async {
     return url_launcher.closeInAppWebView();
+  }
+
+  @override
+  Future<void> firebaseInitializeAppCheck() async {
+    try {
+      await firebase_app_check.FirebaseAppCheck.instance.activate(
+        androidProvider: firebase_app_check.AndroidProvider.debug,
+        appleProvider: firebase_app_check.AppleProvider.debug,
+      );
+      print('firebase app check success');
+    } catch (e, st) {
+      print('appcheck apailed: $e\n$st');
+    }
+  }
+
+  @override
+  Future<String?> getAppCheckToken() async {
+    try {
+      final tokenResult = await firebase_app_check.FirebaseAppCheck.instance.getToken();
+      print('firebase app check success');
+      return tokenResult;
+    } catch (e, st) {
+      print('appcheck apailed: $e\n$st');
+      return null;
+    }
   }
 
   @override
@@ -505,7 +539,10 @@ class LiveZulipBinding extends ZulipBinding {
   @override
   Future<void> firebaseInitializeApp({
       required firebase_core.FirebaseOptions options}) {
-    return firebase_core.Firebase.initializeApp(options: options);
+    if (firebase_core.Firebase.apps.isEmpty) {
+      return firebase_core.Firebase.initializeApp(options: options);
+    }
+    return Future.value();
   }
 
   @override
