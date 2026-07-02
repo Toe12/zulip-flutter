@@ -36,7 +36,7 @@ const kFirebaseOptionsAndroid = FirebaseOptions(
 ///
 /// TODO: Cut out Firebase for APNs and use a thinner platform-API binding.
 const kFirebaseOptionsIos = FirebaseOptions(
-  appId: '1:${_ZulipFirebaseOptions.projectNumber}:ios:9cad34899ca57ba6',
+  appId: '1:${_ZulipFirebaseOptions.projectNumber}:ios:a9bdcc9bd933031cdcc2b0',
   messagingSenderId: _ZulipFirebaseOptions.projectNumber,
   projectId: _ZulipFirebaseOptions.projectId,
   apiKey: _ZulipFirebaseOptions.firebaseApiKey,
