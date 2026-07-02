@@ -5,8 +5,8 @@
 // and MinimumOSVersion in ios/Flutter/AppFrameworkInfo.plist.
 IPHONEOS_DEPLOYMENT_TARGET=15.0
 
-DEVELOPMENT_TEAM=66KHCWMEYB
+DEVELOPMENT_TEAM=3FR6H53LJ7
 
 // This should match the `iosAppGroupIdentifier` variable in
 // lib/model/store.dart.
-ZULIP_APP_GROUP_IDENTIFIER=group.com.zulip.app
+ZULIP_APP_GROUP_IDENTIFIER=group.com.wecare.zulip
