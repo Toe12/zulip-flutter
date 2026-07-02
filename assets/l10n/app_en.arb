@@ -1698,9 +1698,9 @@
   "@appVersionUnknownPlaceholder": {
     "description": "Placeholder to show in place of the app version when it is unknown."
   },
-  "zulipAppTitle": "Zulip",
+  "zulipAppTitle": "basecomms",
   "@zulipAppTitle": {
-    "description": "The name of Zulip. This should be either 'Zulip' or a transliteration."
+    "description": "The name of the app. This should be either 'basecomms' or a transliteration."
   },
   "topicListEmptyPlaceholderHeader": "There are no topics here yet.",
   "@topicListEmptyPlaceholderHeader": {
