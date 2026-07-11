@@ -1,0 +1,12 @@
+<svg viewBox="0 0 1024 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="500" fill="#111827"/>
+  <circle cx="250" cy="250" r="150" fill="#ffffff"/>
+  <g transform="translate(250 250) scale(1.35) translate(-86 -78)">
+    <line x1="52" y1="20" x2="52" y2="116" stroke="#111827" stroke-width="12" stroke-linecap="round"/>
+    <circle cx="88" cy="84" r="32" fill="none" stroke="#111827" stroke-width="12"/>
+    <circle cx="88" cy="84" r="8" fill="#6366F1"/>
+    <line x1="46" y1="136" x2="126" y2="136" stroke="#6366F1" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <text x="450" y="265" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="92" fill="#ffffff">basecomms</text>
+  <text x="453" y="330" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="400" font-size="34" fill="#8b8ff8">Organized team chat</text>
+</svg>
