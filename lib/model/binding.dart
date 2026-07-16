@@ -451,8 +451,28 @@ class LiveZulipBinding extends ZulipBinding {
     return url_launcher.closeInAppWebView();
   }
 
+@override
+Future<void> firebaseInitializeAppCheck() async {
+  try {
+    final android = kDebugMode ? firebase_app_check.AndroidProvider.debug : firebase_app_check.AndroidProvider.playIntegrity;
+    final apple = kDebugMode ? firebase_app_check.AppleProvider.debug : firebase_app_check.AppleProvider.appAttestWithDeviceCheckFallback;
+    print('kDebugMode is: $kDebugMode');
+    print('App Check provider Android: $android');
+    print('App Check provider Apple: $apple');
+
+    await firebase_app_check.FirebaseAppCheck.instance.activate(
+      androidProvider: android,
+      appleProvider: apple,
+    );
+
+    print('firebase app check success');
+  } catch (e, st) {
+    print('appcheck failed: $e\n$st');
+  }
+}
+
   @override
-  Future<void> firebaseInitializeAppCheck() async {
+  Future<void> firebaseInitializeAppCheck_debugonly() async {
     try {
       await firebase_app_check.FirebaseAppCheck.instance.activate(
         androidProvider: firebase_app_check.AndroidProvider.debug,
