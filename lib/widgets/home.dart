@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import '../api/core.dart';
 import '../api/model/model.dart';
 import '../generated/l10n/zulip_localizations.dart';
+import '../model/actions.dart';
 import '../model/narrow.dart';
 import 'about_zulip.dart';
 import 'action_sheet.dart';
@@ -15,6 +16,7 @@ import 'app_bar.dart';
 import 'banner.dart';
 import 'button.dart';
 import 'color.dart';
+import 'dialog.dart';
 import 'icons.dart';
 import 'image.dart';
 import 'inbox.dart';
@@ -420,6 +422,7 @@ class _MainMenu extends StatelessWidget {
       // const SizedBox(height: 8),
       const _AboutZulipButton(),
       // TODO(#1095): VersionInfo
+      const _LogOutButton(),
     ];
 
     return SafeArea(
@@ -454,14 +457,19 @@ class _MainMenuHeader extends StatefulWidget {
 }
 
 class _MainMenuHeaderState extends State<_MainMenuHeader> {
+  // TEMPORARY: switch-organization is disabled; these are kept for easy
+  // restoration. See the header build() below.
+  // ignore: unused_field
   bool _isPressed = false;
 
+  // ignore: unused_element
   void _setIsPressed(bool isPressed) {
     setState(() {
       _isPressed = isPressed;
     });
   }
 
+  // ignore: unused_element
   void _handleSwitchAccount(BuildContext context) {
     Navigator.pop(context); // Close the main menu.
     Navigator.push(context,
@@ -470,46 +478,77 @@ class _MainMenuHeaderState extends State<_MainMenuHeader> {
 
   @override
   Widget build(BuildContext context) {
-    final zulipLocalizations = ZulipLocalizations.of(context);
+    // TEMPORARY: the "switch organization" control is disabled. The realm
+    // icon + name is shown as a static header (no tap-to-switch, no switcher
+    // arrow, no tooltip). To restore, delete the static `return Padding(...)`
+    // below and un-comment the original interactive header.
     final designVariables = DesignVariables.of(context);
     final store = PerAccountStoreWidget.of(context);
 
-    return Tooltip(
-      message: zulipLocalizations.switchAccountButtonTooltip,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => _handleSwitchAccount(context),
-        onTapDown: (_) => _setIsPressed(true),
-        onTapUp: (_) => _setIsPressed(false),
-        onTapCancel: () => _setIsPressed(false),
-        child: AnimatedOpacity(
-          opacity: _isPressed ? 0.5 : 1,
-          duration: const Duration(milliseconds: 100),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 6, left: 12, right: 12),
-            child: Row(spacing: 12, children: [
-              Flexible(child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Row(spacing: 8, children: [
-                  AvatarShape(
-                    size: 28,
-                    borderRadius: 4,
-                    child: RealmContentNetworkImage(
-                      store.resolvedRealmIcon,
-                      filterQuality: FilterQuality.medium,
-                      fit: BoxFit.cover)),
-                  Flexible(child: Text(store.realmName,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: designVariables.title,
-                      fontSize: 20,
-                      height: 24 / 20,
-                    ).merge(weightVariableTextStyle(context, wght: 600)))),
-                ]))),
-              Icon(ZulipIcons.arrow_left_right,
-                color: designVariables.icon,
-                size: 24),
-            ])))));
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, left: 12, right: 12),
+      child: Row(spacing: 12, children: [
+        Flexible(child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(spacing: 8, children: [
+            AvatarShape(
+              size: 28,
+              borderRadius: 4,
+              child: RealmContentNetworkImage(
+                store.resolvedRealmIcon,
+                filterQuality: FilterQuality.medium,
+                fit: BoxFit.cover)),
+            Flexible(child: Text(store.realmName,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: designVariables.title,
+                fontSize: 20,
+                height: 24 / 20,
+              ).merge(weightVariableTextStyle(context, wght: 600)))),
+          ]))),
+      ]));
+
+    // TEMPORARY: original interactive "switch organization" header, kept
+    // commented for easy restoration. Also restore the
+    // `final zulipLocalizations = ZulipLocalizations.of(context);` line above,
+    // and remove the `// ignore:` markers on _isPressed / _setIsPressed /
+    // _handleSwitchAccount.
+    // return Tooltip(
+    //   message: zulipLocalizations.switchAccountButtonTooltip,
+    //   child: GestureDetector(
+    //     behavior: HitTestBehavior.opaque,
+    //     onTap: () => _handleSwitchAccount(context),
+    //     onTapDown: (_) => _setIsPressed(true),
+    //     onTapUp: (_) => _setIsPressed(false),
+    //     onTapCancel: () => _setIsPressed(false),
+    //     child: AnimatedOpacity(
+    //       opacity: _isPressed ? 0.5 : 1,
+    //       duration: const Duration(milliseconds: 100),
+    //       child: Padding(
+    //         padding: const EdgeInsets.only(top: 6, left: 12, right: 12),
+    //         child: Row(spacing: 12, children: [
+    //           Flexible(child: Padding(
+    //             padding: const EdgeInsets.symmetric(vertical: 6),
+    //             child: Row(spacing: 8, children: [
+    //               AvatarShape(
+    //                 size: 28,
+    //                 borderRadius: 4,
+    //                 child: RealmContentNetworkImage(
+    //                   store.resolvedRealmIcon,
+    //                   filterQuality: FilterQuality.medium,
+    //                   fit: BoxFit.cover)),
+    //               Flexible(child: Text(store.realmName,
+    //                 overflow: TextOverflow.ellipsis,
+    //                 style: TextStyle(
+    //                   color: designVariables.title,
+    //                   fontSize: 20,
+    //                   height: 24 / 20,
+    //                 ).merge(weightVariableTextStyle(context, wght: 600)))),
+    //             ]))),
+    //           Icon(ZulipIcons.arrow_left_right,
+    //             color: designVariables.icon,
+    //             size: 24),
+    //         ])))));
   }
 }
 
@@ -857,6 +896,39 @@ class _AboutZulipButton extends MenuButton {
   @override
   void onPressed(BuildContext context) {
     Navigator.of(context).push(AboutZulipPage.buildRoute(context));
+  }
+}
+
+/// Logs out of the current account, after a confirmation dialog.
+///
+/// Added to the main menu because the account switcher (which used to host
+/// the log-out action) is temporarily disabled; see [_MainMenuHeaderState].
+class _LogOutButton extends MenuButton {
+  const _LogOutButton();
+
+  @override
+  IconData get icon => Icons.logout;
+
+  @override
+  String label(ZulipLocalizations zulipLocalizations) {
+    return zulipLocalizations.chooseAccountPageLogOutButton;
+  }
+
+  @override
+  void onPressed(BuildContext context) async {
+    final zulipLocalizations = ZulipLocalizations.of(context);
+    // Capture these before any async gap, since the menu is being dismissed.
+    final globalStore = GlobalStoreWidget.of(context);
+    final accountId = PerAccountStoreWidget.of(context).accountId;
+    final dialog = showSuggestedActionDialog(context: context,
+      title: zulipLocalizations.logOutConfirmationDialogTitle,
+      message: zulipLocalizations.logOutConfirmationDialogMessage,
+      destructiveActionButton: true,
+      actionButtonText: zulipLocalizations.logOutConfirmationDialogConfirmButton);
+    if (await dialog.result == true) {
+      // TODO error handling if db write fails?
+      unawaited(logOutAccount(globalStore, accountId));
+    }
   }
 }
 
