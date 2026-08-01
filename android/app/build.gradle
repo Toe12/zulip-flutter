@@ -31,7 +31,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.zulipmobile"
+        applicationId "com.basecomms.app"
         minSdkVersion 26
         targetSdkVersion flutter.targetSdkVersion
         // These are synced to local.properties from pubspec.yaml by the flutter tool.
