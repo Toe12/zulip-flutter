@@ -624,9 +624,9 @@ class Toggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final designVariables = DesignVariables.of(context);
 
-    // Figma has this (blue/500) in both light and dark mode.
+    // Follow the theme's selected-control fill (WhatsApp-style green).
     // TODO(#831)
-    final activeColor = Color(0xff4370f0);
+    final activeColor = designVariables.radioFillSelected;
 
     final activeColorDisabled = activeColor.withFadedAlpha(0.4);
 

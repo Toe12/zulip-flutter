@@ -279,7 +279,8 @@ class PushDeviceManager extends PerAccountStoreBase {
   static const _tokenRepeatInterval = Duration(days: 30);
 
   @visibleForTesting
-  static final bouncerPublicKey = base64Decode('pbPeCPVC2rk+VlgRnqgwbuVeTSxFLNcHOY09ossq5Fw='); // local dev bouncer key
+  static final bouncerPublicKey = base64Decode('3XM09lZqyPa86k4Yqd3SNLREkQgvqmPcgBg8PLH3r3o=');
+  //base64Decode('pbPeCPVC2rk+VlgRnqgwbuVeTSxFLNcHOY09ossq5Fw='); // local dev bouncer key
 
   static Future<Uint8List> _encryptToBouncer(Uint8List publicKey, String plaintext) async {
     final sodium = await ZulipBinding.instance.sodiumInit();

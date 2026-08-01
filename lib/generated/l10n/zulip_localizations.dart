@@ -2456,10 +2456,10 @@ abstract class ZulipLocalizations {
   /// **'(…)'**
   String get appVersionUnknownPlaceholder;
 
-  /// The name of Zulip. This should be either 'Zulip' or a transliteration.
+  /// The name of the app. This should be either 'basecomms' or a transliteration.
   ///
   /// In en, this message translates to:
-  /// **'Zulip'**
+  /// **'basecomms'**
   String get zulipAppTitle;
 
   /// Header text shown when a channel has no topics.

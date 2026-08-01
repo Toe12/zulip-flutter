@@ -1413,7 +1413,7 @@ class ZulipLocalizationsSk extends ZulipLocalizations {
   String get appVersionUnknownPlaceholder => '(…)';
 
   @override
-  String get zulipAppTitle => 'Zulip';
+  String get zulipAppTitle => 'basecomms';
 
   @override
   String get topicListEmptyPlaceholderHeader => 'There are no topics here yet.';

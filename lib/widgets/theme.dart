@@ -127,11 +127,11 @@ ThemeData zulipThemeData(BuildContext context) {
   );
 }
 
-/// The Zulip "brand color", a purplish blue.
+/// The app's brand color, a WhatsApp-style green.
 ///
-/// This is chosen as the sRGB midpoint of the Zulip logo's gradient.
-// As computed by Anders: https://github.com/zulip/zulip-mobile/pull/4467
-const kZulipBrandColor = Color.fromRGBO(0x64, 0x92, 0xfe, 1);
+/// This replaces upstream Zulip's purplish-blue brand color to give
+/// this fork a WhatsApp-inspired visual identity.
+const kZulipBrandColor = Color.fromRGBO(0x00, 0xa8, 0x84, 1);
 
 /// Design variables, mainly from the Figma design.
 ///
@@ -143,69 +143,69 @@ class DesignVariables extends ThemeExtension<DesignVariables> {
   static final light = DesignVariables._(
     background: const Color(0xffffffff),
     bannerBgIntDanger: const Color(0xfff2e4e4),
-    bannerBgIntInfo: const Color(0xffddecf6),
+    bannerBgIntInfo: const Color(0xffe7f8f1),
     bannerBgIntWarning: const Color(0xfffaf5dc),
-    bannerTextIntInfo: const Color(0xff06037c),
-    bgBotBar: const Color(0xfff6f6f6),
-    bgContextMenu: const Color(0xfff2f2f2),
-    bgCounterUnread: const Color(0xff666699).withValues(alpha: 0.15),
+    bannerTextIntInfo: const Color(0xff075e54),
+    bgBotBar: const Color(0xfff0f2f5),
+    bgContextMenu: const Color(0xfff0f2f5),
+    bgCounterUnread: const Color(0xff25d366),
     bgMenuButtonActive: Colors.black.withValues(alpha: 0.05),
     bgMenuButtonSelected: Colors.white,
     bgMessageRegular: const HSLColor.fromAHSL(1, 0, 0, 1).toColor(),
-    bgSearchInput: const Color(0xffe3e3e3),
-    bgTopBar: const Color(0xfff5f5f5),
+    bgSearchInput: const Color(0xffe9edef),
+    bgTopBar: const Color(0xfff0f2f5),
     borderBar: Colors.black.withValues(alpha: 0.2),
     borderMenuButtonSelected: Colors.black.withValues(alpha: 0.2),
-    btnBgAttHighIntInfoActive: const Color(0xff1e41d3),
-    btnBgAttHighIntInfoNormal: const Color(0xff3c6bff),
+    btnBgAttHighIntInfoActive: const Color(0xff075e54),
+    btnBgAttHighIntInfoNormal: const Color(0xff008069),
     btnBgAttHighIntWarningActive: const Color(0xffeba002),
     btnBgAttHighIntWarningNormal: const Color(0xfffebe3d),
     btnBgAttLowIntDangerActive: const Color(0xffc0070a).withValues(alpha: 0.13),
-    btnBgAttLowIntInfoActive: const Color(0xff06037c).withValues(alpha: 0.09),
+    btnBgAttLowIntInfoActive: const Color(0xff008069).withValues(alpha: 0.12),
     btnBgAttMediumIntDangerActive: const Color(0xffe1392e).withValues(alpha: 0.23),
     btnBgAttMediumIntDangerNormal: const Color(0xffe1392e).withValues(alpha: 0.13),
-    btnBgAttMediumIntInfoActive: const Color(0xff3c6bff).withValues(alpha: 0.22),
-    btnBgAttMediumIntInfoNormal: const Color(0xff3c6bff).withValues(alpha: 0.12),
+    btnBgAttMediumIntInfoActive: const Color(0xff008069).withValues(alpha: 0.22),
+    btnBgAttMediumIntInfoNormal: const Color(0xff008069).withValues(alpha: 0.12),
     btnBgAttMediumIntWarningActive: const Color(0xffeba001).withValues(alpha: 0.28),
     btnBgAttMediumIntWarningNormal: const Color(0xffeba002).withValues(alpha: 0.18),
     btnLabelAttHigh: const Color(0xffffffff),
     btnLabelAttHighIntWarning: const Color(0xff000000).withValues(alpha: 0.88),
     btnLabelAttLowIntDanger: const Color(0xffc0070a),
-    btnLabelAttLowIntInfo: const Color(0xff2347c6),
+    btnLabelAttLowIntInfo: const Color(0xff008069),
     btnLabelAttMediumIntDanger: const Color(0xffac0508),
-    btnLabelAttMediumIntInfo: const Color(0xff1027a6),
+    btnLabelAttMediumIntInfo: const Color(0xff075e54),
     btnLabelAttMediumIntWarning: const Color(0xff764607),
     btnShadowAttMed: const Color(0xff000000).withValues(alpha: 0.20),
     composeBoxBg: const Color(0xffffffff),
     contextMenuBg: const Color(0xffffffff), // grey/900
     contextMenuBorder: const Color(0xff9ea1ae), // grey/350
     contextMenuCancelText: const Color(0xff222222),
-    contextMenuItemBg: const Color(0xff6159e1),
+    contextMenuItemBg: const Color(0xff008069),
     contextMenuItemBgDanger: const Color(0xffc0070a), // TODO(#831) red/550
-    contextMenuItemIcon: const Color(0xff4f42c9),
+    contextMenuItemIcon: const Color(0xff008069),
     contextMenuItemIconDanger: const Color(0xffac0508), // TODO(#831) red/600
     contextMenuItemLabel: const Color(0xff242631),
     contextMenuItemMeta: const Color(0xff626573),
-    contextMenuItemText: const Color(0xff381da7),
+    contextMenuItemText: const Color(0xff075e54),
     contextMenuItemTextDanger: const Color(0xffac0508), // TODO(#831) red/600
     editorButtonPressedBg: Colors.black.withValues(alpha: 0.06),
-    fabBg: const Color(0xff6e69f3),
-    fabBgPressed: const Color(0xff6159e1),
-    fabLabel: const Color(0xfff1f3fe),
-    fabLabelPressed: const Color(0xffeceefc),
-    fabShadow: const Color(0xff2b0e8a).withValues(alpha: 0.4),
+    fabBg: const Color(0xff00a884),
+    fabBgPressed: const Color(0xff008069),
+    fabLabel: const Color(0xffffffff),
+    fabLabelPressed: const Color(0xffffffff),
+    fabShadow: const Color(0xff000000).withValues(alpha: 0.3),
     folderText: const Color(0xff596680),
     foreground: const Color(0xff000000),
-    groupIcon: const Color(0xff7199fe), // blue/350
-    icon: const Color(0xff6159e1),
+    groupIcon: const Color(0xff8696a0), // WhatsApp grey
+    icon: const Color(0xff54656f),
     iconSelected: const Color(0xff222222),
     labelCounterQuantity: const Color(0xff222222).withValues(alpha: 0.6),
-    labelCounterUnread: const Color(0xff1a1a1a),
+    labelCounterUnread: const Color(0xffffffff),
     labelEdited: const HSLColor.fromAHSL(0.35, 0, 0, 0).toColor(),
     labelMenuButton: const Color(0xff222222),
     labelSearchPrompt: const Color(0xff000000).withValues(alpha: 0.5),
     labelTime: const Color(0x00000000).withValues(alpha: 0.49),
-    link: const Color(0xff066bd0), // from "Zulip Web UI kit"
+    link: const Color(0xff027eb5), // WhatsApp light-mode link blue
     listMenuItemBg: const Color(0xffcbcdd6),
     listMenuItemIcon: const Color(0xff9194a3),
     listMenuItemText: const Color(0xff2d303c),
@@ -213,12 +213,12 @@ class DesignVariables extends ThemeExtension<DesignVariables> {
     // Keep the color here and the corresponding non-dark mode entry in
     // ios/Runner/Assets.xcassets/LaunchBackground.colorset/Contents.json
     // in sync.
-    mainBackground: const Color(0xfff0f0f0),
+    mainBackground: const Color(0xffffffff),
 
-    neutralButtonBg: const Color(0xff8c84ae),
-    neutralButtonLabel: const Color(0xff433d5c),
+    neutralButtonBg: const Color(0xff9e9e9e),
+    neutralButtonLabel: const Color(0xff4a4a4a),
     radioBorder: Color(0xffbbbdc8),
-    radioFillSelected: Color(0xff4370f0),
+    radioFillSelected: Color(0xff008069),
     statusAway: Color(0xff73788c).withValues(alpha: 0.25),
 
     // Following Web because it uses a gradient, to distinguish it by shape from
@@ -235,7 +235,7 @@ class DesignVariables extends ThemeExtension<DesignVariables> {
     avatarPlaceholderIcon: Colors.black.withValues(alpha: 0.5),
     contextMenuCancelBg: const Color(0xff797986).withValues(alpha: 0.15),
     contextMenuCancelPressedBg: const Color(0xff797986).withValues(alpha: 0.20),
-    dmHeaderBg: const HSLColor.fromAHSL(1, 46, 0.35, 0.93).toColor(),
+    dmHeaderBg: const HSLColor.fromAHSL(1, 166, 0.35, 0.93).toColor(),
     inboxItemIconMarker: const HSLColor.fromAHSL(0.5, 0, 0, 0.2).toColor(),
     loginOrDivider: const Color(0xffdedede),
     loginOrDividerText: const Color(0xff575757),
@@ -253,69 +253,69 @@ class DesignVariables extends ThemeExtension<DesignVariables> {
   static final dark = DesignVariables._(
     background: const Color(0xff000000),
     bannerBgIntDanger: const Color(0xff461616),
-    bannerBgIntInfo: const Color(0xff00253d),
+    bannerBgIntInfo: const Color(0xff0d332a),
     bannerBgIntWarning: const Color(0xff332b00),
-    bannerTextIntInfo: const Color(0xffcbdbfd),
-    bgBotBar: const Color(0xff222222),
-    bgContextMenu: const Color(0xff262626),
-    bgCounterUnread: const Color(0xff666699).withValues(alpha: 0.37),
+    bannerTextIntInfo: const Color(0xffd9fdd3),
+    bgBotBar: const Color(0xff202c33),
+    bgContextMenu: const Color(0xff233138),
+    bgCounterUnread: const Color(0xff00a884),
     bgMenuButtonActive: Colors.black.withValues(alpha: 0.2),
     bgMenuButtonSelected: Colors.black.withValues(alpha: 0.25),
-    bgMessageRegular: const Color(0xff1d1d1d),
-    bgSearchInput: const Color(0xff313131),
-    bgTopBar: const Color(0xff242424),
+    bgMessageRegular: const Color(0xff111b21),
+    bgSearchInput: const Color(0xff202c33),
+    bgTopBar: const Color(0xff202c33),
     borderBar: const Color(0xffffffff).withValues(alpha: 0.1),
     borderMenuButtonSelected: Colors.white.withValues(alpha: 0.1),
-    btnBgAttHighIntInfoActive: const Color(0xff1e41d3),
-    btnBgAttHighIntInfoNormal: const Color(0xff1e41d3),
+    btnBgAttHighIntInfoActive: const Color(0xff008069),
+    btnBgAttHighIntInfoNormal: const Color(0xff00a884),
     btnBgAttHighIntWarningActive: const Color(0xffdb920d),
     btnBgAttHighIntWarningNormal: const Color(0xffdb920d),
     btnBgAttLowIntDangerActive: const Color(0xfff34c3e).withValues(alpha: 0.17),
-    btnBgAttLowIntInfoActive: const Color(0xff4d7bfd).withValues(alpha: 0.17),
+    btnBgAttLowIntInfoActive: const Color(0xff00a884).withValues(alpha: 0.17),
     btnBgAttMediumIntDangerActive: const Color(0xfffd5f50).withValues(alpha: 0.12),
     btnBgAttMediumIntDangerNormal: const Color(0xfffd5f50).withValues(alpha: 0.12),
-    btnBgAttMediumIntInfoActive: const Color(0xff97b6fe).withValues(alpha: 0.12),
-    btnBgAttMediumIntInfoNormal: const Color(0xff97b6fe).withValues(alpha: 0.12),
+    btnBgAttMediumIntInfoActive: const Color(0xff00a884).withValues(alpha: 0.15),
+    btnBgAttMediumIntInfoNormal: const Color(0xff00a884).withValues(alpha: 0.15),
     btnBgAttMediumIntWarningActive: const Color(0xffdb920d).withValues(alpha: 0.12),
     btnBgAttMediumIntWarningNormal: const Color(0xffdb920d).withValues(alpha: 0.12),
     btnLabelAttHigh: const Color(0xffffffff).withValues(alpha: 0.85),
     btnLabelAttHighIntWarning: const Color(0xff000000).withValues(alpha: 0.90),
     btnLabelAttLowIntDanger: const Color(0xffff8b7c),
-    btnLabelAttLowIntInfo: const Color(0xff84a8fd),
+    btnLabelAttLowIntInfo: const Color(0xff06cf9c),
     btnLabelAttMediumIntDanger: const Color(0xffff8b7c),
-    btnLabelAttMediumIntInfo: const Color(0xff97b6fe),
+    btnLabelAttMediumIntInfo: const Color(0xff06cf9c),
     btnLabelAttMediumIntWarning: const Color(0xfff8b325),
     btnShadowAttMed: const Color(0xffffffff).withValues(alpha: 0.21),
-    composeBoxBg: const Color(0xff0f0f0f),
-    contextMenuBg: const Color(0xff11131e),
+    composeBoxBg: const Color(0xff202c33),
+    contextMenuBg: const Color(0xff233138),
     contextMenuBorder: const Color(0xff444754), // grey/650
     contextMenuCancelText: const Color(0xffffffff).withValues(alpha: 0.75),
-    contextMenuItemBg: const Color(0xff7977fe),
+    contextMenuItemBg: const Color(0xff00a884),
     contextMenuItemBgDanger: const Color(0xffe1392e), // TODO(#831) red/450
-    contextMenuItemIcon: const Color(0xff9398fd),
+    contextMenuItemIcon: const Color(0xff00a884),
     contextMenuItemIconDanger: const Color(0xfffd7465), // TODO(#831) red/300
     contextMenuItemLabel: const Color(0xffdfe1e8),
     contextMenuItemMeta: const Color(0xff9194a3),
-    contextMenuItemText: const Color(0xff9398fd),
+    contextMenuItemText: const Color(0xff06cf9c),
     contextMenuItemTextDanger: const Color(0xfffd7465), // TODO(#831) red/300
     editorButtonPressedBg: Colors.white.withValues(alpha: 0.06),
-    fabBg: const Color(0xff4f42c9),
-    fabBgPressed: const Color(0xff4331b8),
-    fabLabel: const Color(0xffeceefc),
-    fabLabelPressed: const Color(0xffeceefc),
-    fabShadow: const Color(0xff18171c),
+    fabBg: const Color(0xff00a884),
+    fabBgPressed: const Color(0xff008069),
+    fabLabel: const Color(0xff111b21),
+    fabLabelPressed: const Color(0xff111b21),
+    fabShadow: const Color(0xff000000),
     folderText: const Color(0xff8793ab),
     foreground: const Color(0xffffffff),
-    groupIcon: const Color(0xff84a8fd), // blue/300
-    icon: const Color(0xff7977fe),
+    groupIcon: const Color(0xff8696a0), // WhatsApp grey
+    icon: const Color(0xff8696a0),
     iconSelected: Colors.white.withValues(alpha: 0.8),
     labelCounterQuantity: const Color(0xffffffff).withValues(alpha: 0.7),
-    labelCounterUnread: const Color(0xffffffff).withValues(alpha: 0.95),
+    labelCounterUnread: const Color(0xff111b21),
     labelEdited: const HSLColor.fromAHSL(0.35, 0, 0, 1).toColor(),
     labelMenuButton: const Color(0xffffffff).withValues(alpha: 0.85),
     labelSearchPrompt: const Color(0xffffffff).withValues(alpha: 0.5),
     labelTime: const Color(0xffffffff).withValues(alpha: 0.50),
-    link: const Color(0xff00aaff), // from "Zulip Web UI kit"
+    link: const Color(0xff53bdeb), // WhatsApp dark-mode link blue
     listMenuItemBg: const Color(0xff2d303c),
     listMenuItemIcon: const Color(0xff767988),
     listMenuItemText: const Color(0xffcbcdd6),
@@ -323,12 +323,12 @@ class DesignVariables extends ThemeExtension<DesignVariables> {
     // Keep the color here and the corresponding dark mode entry in
     // ios/Runner/Assets.xcassets/LaunchBackground.colorset/Contents.json
     // in sync.
-    mainBackground: const Color(0xff1d1d1d),
+    mainBackground: const Color(0xff0b141a),
 
-    neutralButtonBg: const Color(0xffd4d1e0),
-    neutralButtonLabel: const Color(0xffa9a3c2),
+    neutralButtonBg: const Color(0xffe0e0e0),
+    neutralButtonLabel: const Color(0xffb3b3b3),
     radioBorder: Color(0xff626573),
-    radioFillSelected: Color(0xff4e7cfa),
+    radioFillSelected: Color(0xff00a884),
     statusAway: Color(0xffabaeba).withValues(alpha: 0.30),
 
     // Following Web because it uses a gradient, to distinguish it by shape from
@@ -348,7 +348,7 @@ class DesignVariables extends ThemeExtension<DesignVariables> {
     contextMenuCancelBg: const Color(0xff797986).withValues(alpha: 0.15), // the same as the light mode in Figma
     contextMenuCancelPressedBg: const Color(0xff797986).withValues(alpha: 0.20), // the same as the light mode in Figma
     // TODO(design-dark) need proper dark-theme color (this is ad hoc)
-    dmHeaderBg: const HSLColor.fromAHSL(1, 46, 0.15, 0.2).toColor(),
+    dmHeaderBg: const HSLColor.fromAHSL(1, 166, 0.25, 0.16).toColor(),
     inboxItemIconMarker: const HSLColor.fromAHSL(0.4, 0, 0, 1).toColor(),
     loginOrDivider: const Color(0xff424242),
     loginOrDividerText: const Color(0xffa8a8a8),
