@@ -9,4 +9,4 @@ DEVELOPMENT_TEAM=3FR6H53LJ7
 
 // This should match the `iosAppGroupIdentifier` variable in
 // lib/model/store.dart.
-ZULIP_APP_GROUP_IDENTIFIER=group.com.wecare.zulip
+ZULIP_APP_GROUP_IDENTIFIER=group.com.basecomms.app

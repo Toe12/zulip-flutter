@@ -1310,7 +1310,7 @@ class LiveGlobalStore extends GlobalStore {
     //
     // This should match ZULIP_APP_GROUP_IDENTIFIER in
     // ios/Flutter/Zulip.xcconfig.
-    const iosAppGroupIdentifier = 'group.com.wecare.zulip';
+    const iosAppGroupIdentifier = 'group.com.basecomms.app';
 
     final containerDbDir = await PathProviderFoundation().getContainerPath(
       appGroupIdentifier: iosAppGroupIdentifier);

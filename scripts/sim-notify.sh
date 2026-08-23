@@ -24,7 +24,7 @@
 set -euo pipefail
 
 # ---- config (override via env) ------------------------------------------------
-BUNDLE_ID="${BUNDLE_ID:-com.wecare.zulip}"
+BUNDLE_ID="${BUNDLE_ID:-com.basecomms.app}"
 REALM_URL="${REALM_URL:-http://localhost:9991}"
 USER_ID="${USER_ID:-26}"      # the account logged in on the simulator
 SENDER_ID="${SENDER_ID:-28}"  # who the message is "from"
