@@ -168,7 +168,6 @@ class ApiConnection {
     }
 
     final appCheckToken = await ZulipBinding.instance.getAppCheckToken();
-	print("appchecktoken: " + appCheckToken!);
 
     if (appCheckToken != null) {
       request.headers['X-Firebase-AppCheck'] = appCheckToken;
