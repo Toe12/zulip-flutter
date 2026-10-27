@@ -19,7 +19,7 @@ import '../host/notifications.dart' as notif_pigeon;
 import '../log.dart';
 import 'store.dart';
 
-export 'package:file_picker/file_picker.dart' show FilePickerResult, FileType, PlatformFile;
+export 'package:file_picker/file_picker.dart' show FileType, PlatformFile;
 export 'package:image_picker/image_picker.dart' show ImageSource, XFile;
 
 /// Alias for [url_launcher.LaunchMode].
@@ -209,10 +209,8 @@ abstract class ZulipBinding {
 
   /// Pick files from the media library, via package:file_picker.
   ///
-  /// This wraps [file_picker.pickFiles].
-  Future<file_picker.FilePickerResult?> pickFiles({
-    bool allowMultiple,
-    bool withReadStream,
+  /// This wraps [file_picker.FilePicker.pickFiles].
+  Future<List<file_picker.PlatformFile>> pickFiles({
     file_picker.FileType type,
   });
 
@@ -454,15 +452,19 @@ class LiveZulipBinding extends ZulipBinding {
 @override
 Future<void> firebaseInitializeAppCheck() async {
   try {
-    final android = kDebugMode ? firebase_app_check.AndroidProvider.debug : firebase_app_check.AndroidProvider.playIntegrity;
-    final apple = kDebugMode ? firebase_app_check.AppleProvider.debug : firebase_app_check.AppleProvider.appAttestWithDeviceCheckFallback;
+    final android = kDebugMode
+      ? const firebase_app_check.AndroidDebugProvider()
+      : const firebase_app_check.AndroidPlayIntegrityProvider();
+    final apple = kDebugMode
+      ? const firebase_app_check.AppleDebugProvider()
+      : const firebase_app_check.AppleAppAttestWithDeviceCheckFallbackProvider();
     print('kDebugMode is: $kDebugMode');
     print('App Check provider Android: $android');
     print('App Check provider Apple: $apple');
 
     await firebase_app_check.FirebaseAppCheck.instance.activate(
-      androidProvider: android,
-      appleProvider: apple,
+      providerAndroid: android,
+      providerApple: apple,
     );
 
     print('firebase app check success');
@@ -475,8 +477,8 @@ Future<void> firebaseInitializeAppCheck() async {
   Future<void> firebaseInitializeAppCheck_debugonly() async {
     try {
       await firebase_app_check.FirebaseAppCheck.instance.activate(
-        androidProvider: firebase_app_check.AndroidProvider.debug,
-        appleProvider: firebase_app_check.AppleProvider.debug,
+        providerAndroid: const firebase_app_check.AndroidDebugProvider(),
+        providerApple: const firebase_app_check.AppleDebugProvider(),
       );
       print('firebase app check success');
     } catch (e, st) {
@@ -554,7 +556,7 @@ Future<void> firebaseInitializeAppCheck() async {
   }
 
   @override
-  Future<Sodium> sodiumInit() => SodiumInit.init();
+  Future<Sodium> sodiumInit() async => SodiumInit.init();
 
   @override
   Future<void> firebaseInitializeApp({
@@ -593,16 +595,10 @@ Future<void> firebaseInitializeAppCheck() async {
   void setupIosNotifFlutterApi(IosNotifFlutterApi api) => IosNotifFlutterApi.setUp(api);
 
   @override
-  Future<file_picker.FilePickerResult?> pickFiles({
-    bool allowMultiple = false,
-    bool withReadStream = false,
+  Future<List<file_picker.PlatformFile>> pickFiles({
     file_picker.FileType type = file_picker.FileType.any,
   }) async {
-    return file_picker.FilePicker.platform.pickFiles(
-      allowMultiple: allowMultiple,
-      withReadStream: withReadStream,
-      type: type,
-    );
+    return file_picker.FilePicker.pickFiles(type: type);
   }
 
   @override

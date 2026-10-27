@@ -2,47 +2,54 @@ import Flutter
 import UIKit
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   private var notificationTapEventListener: NotificationTapEventListener?
+
+  // The implicit engine isn't created until the scene connects, which is after
+  // this point, so hold the payload until there's a messenger to report it on.
+  private var notificationDataFromLaunch: NotificationDataFromLaunch?
 
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication
       .LaunchOptionsKey: Any]?
   ) -> Bool {
-    GeneratedPluginRegistrant.register(with: self)
-
-    // Use `DesignVariables.mainBackground` color as the background color
-    // of the default UIView.
-    window?.backgroundColor = UIColor(named: "LaunchBackground")
-
-    let controller = window?.rootViewController as! FlutterViewController
-
-    IosNativeHostApiSetup.setUp(binaryMessenger: controller.binaryMessenger, api: IosNativeHostApiImpl())
-
     // Retrieve the remote notification payload from launch options;
     // this will be null if the launch wasn't triggered by a notification.
     let notificationPayload =
       launchOptions?[.remoteNotification] as? [AnyHashable: Any]
-    let api = NotificationHostApiImpl(
+    notificationDataFromLaunch =
       notificationPayload.map { NotificationDataFromLaunch(payload: $0) }
-    )
-    NotificationHostApiSetup.setUp(
-      binaryMessenger: controller.binaryMessenger,
-      api: api
-    )
-
-    notificationTapEventListener = NotificationTapEventListener()
-    NotificationTapEventsStreamHandler.register(
-      with: controller.binaryMessenger,
-      streamHandler: notificationTapEventListener!
-    )
 
     UNUserNotificationCenter.current().delegate = self
 
     return super.application(
       application,
       didFinishLaunchingWithOptions: launchOptions
+    )
+  }
+
+  func didInitializeImplicitFlutterEngine(
+    _ engineBridge: FlutterImplicitEngineBridge
+  ) {
+    GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+
+    let messenger = engineBridge.applicationRegistrar.messenger()
+
+    IosNativeHostApiSetup.setUp(
+      binaryMessenger: messenger,
+      api: IosNativeHostApiImpl()
+    )
+
+    NotificationHostApiSetup.setUp(
+      binaryMessenger: messenger,
+      api: NotificationHostApiImpl(notificationDataFromLaunch)
+    )
+
+    notificationTapEventListener = NotificationTapEventListener()
+    NotificationTapEventsStreamHandler.register(
+      with: messenger,
+      streamHandler: notificationTapEventListener!
     )
   }
 
