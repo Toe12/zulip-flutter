@@ -1090,10 +1090,9 @@ abstract class _AttachUploadsButton extends StatelessWidget {
 }
 
 Future<Iterable<FileToUpload>> _getFilePickerFiles(BuildContext context, FileType type) async {
-  FilePickerResult? result;
+  List<PlatformFile> files;
   try {
-    result = await ZulipBinding.instance
-      .pickFiles(allowMultiple: true, withReadStream: true, type: type);
+    files = await ZulipBinding.instance.pickFiles(type: type);
   } catch (e) {
     if (!context.mounted) return [];
     final zulipLocalizations = ZulipLocalizations.of(context);
@@ -1118,29 +1117,28 @@ Future<Iterable<FileToUpload>> _getFilePickerFiles(BuildContext context, FileTyp
     }
     return [];
   }
-  if (result == null) {
+  if (files.isEmpty) {
     return []; // User cancelled; do nothing
   }
 
-  return result.files.map((f) {
-    assert(f.readStream != null);  // We passed `withReadStream: true` to pickFiles.
+  return Future.wait(files.map((f) async {
     final mimeType = lookupMimeType(
-      // Seems like the path shouldn't be required; we still want to look for
-      // matches on `headerBytes`. Thankfully we can still do that, by calling
+      // Seems like the path shouldn't be required. Thankfully we can call
       // lookupMimeType with the empty string as the path. That's a value that
       // doesn't map to any particular type, so the path will be effectively
       // ignored, as desired. Upstream comment:
       //   https://github.com/dart-lang/mime/issues/11#issuecomment-2246824452
       f.path ?? '',
-      headerBytes: f.bytes?.take(defaultMagicNumbersMaxLength).toList(),
     );
     return FileToUpload(
-      content: f.readStream!,
-      length: f.size,
+      content: f.readAsByteStream(),
+      // Null means the picker didn't report a size and reading the file to
+      // find one failed; the upload will fail anyway in that case.
+      length: await f.length() ?? 0,
       filename: f.name,
       mimeType: mimeType,
     );
-  });
+  }));
 }
 
 class _AttachFileButton extends _AttachUploadsButton {

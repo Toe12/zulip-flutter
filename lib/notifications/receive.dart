@@ -123,6 +123,7 @@ class NotificationService {
     assert(debugLog('notif authorization: ${settings.authorizationStatus}'));
     switch (settings.authorizationStatus) {
       case AuthorizationStatus.denied:
+      case AuthorizationStatus.deniedPermanently:
         return false;
       case AuthorizationStatus.authorized:
       case AuthorizationStatus.provisional:

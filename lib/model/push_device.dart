@@ -95,6 +95,13 @@ class PushDeviceManager extends PerAccountStoreBase {
         }
         if (event.pushRegistrationErrorCode case final v?) {
           device.pushRegistrationErrorCode = v.value;
+          if (v.value case final errorCode?) {
+            if (event.deviceId == account.deviceId) {
+              // TODO(#1764) handle errors properly
+              reportErrorToUserBriefly(
+                'Push registration rejected by server: $errorCode');
+            }
+          }
         }
     }
   }
@@ -268,6 +275,9 @@ class PushDeviceManager extends PerAccountStoreBase {
       assert(debugLog('registerPushDevice: success'));
     } catch (e) {
       // TODO(#1764) handle errors
+      // Reported rather than swallowed: without this, a failure here means
+      // notifications silently never arrive, with nothing to debug from.
+      reportErrorToUserBriefly('Push registration failed', details: '$e');
     }
   }
 
