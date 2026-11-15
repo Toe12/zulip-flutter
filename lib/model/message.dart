@@ -128,6 +128,12 @@ mixin MessageStore on ChannelStore {
             GroupSettingType.stream, 'can_delete_any_message_group')) {
         return true;
       }
+
+      // This server also lets a channel's administrators delete any message
+      // in it, without the time limit that applies to one's own messages.
+      if (selfCanAdministerChannel(channel)) {
+        return true;
+      }
     }
 
     final sender = getUser(message.senderId);
