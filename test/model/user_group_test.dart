@@ -129,6 +129,29 @@ void main() {
       ]);
     });
 
+    test('userInGroupSetting, for a user other than the self-user', () {
+      final other = eg.otherUser;
+      final bystander = eg.thirdUser;
+      final inner = eg.userGroup(members: [other.userId]);
+      final outer = eg.userGroup(directSubgroupIds: [inner.id]);
+      prepare([inner, outer], users: [eg.selfUser, other, bystander]);
+
+      // A named group, directly and through a subgroup.
+      check(store.userInGroupSetting(other.userId, GroupSettingValueNamed(inner.id))).isTrue();
+      check(store.userInGroupSetting(other.userId, GroupSettingValueNamed(outer.id))).isTrue();
+      check(store.userInGroupSetting(bystander.userId, GroupSettingValueNamed(outer.id))).isFalse();
+      // The self-user is a different answer from the other user.
+      check(store.userInGroupSetting(eg.selfUser.userId, GroupSettingValueNamed(outer.id))).isFalse();
+
+      // An anonymous group: a direct member, or via a subgroup.
+      check(store.userInGroupSetting(other.userId,
+        eg.groupSetting(members: [other.userId]))).isTrue();
+      check(store.userInGroupSetting(other.userId,
+        eg.groupSetting(subgroups: [outer.id]))).isTrue();
+      check(store.userInGroupSetting(bystander.userId,
+        eg.groupSetting(members: [other.userId], subgroups: [outer.id]))).isFalse();
+    });
+
     test('UserGroupEvent', () async {
       final groups = List.generate(4, (_) => eg.userGroup());
       prepare(groups);

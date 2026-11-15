@@ -22,6 +22,12 @@ mixin UserGroupStore on PerAccountStoreBase {
   /// Whether the self-user is a (transitive) member of the given group,
   /// a group-setting value.
   bool selfInGroupSetting(GroupSettingValue value);
+
+  /// Whether the given user is a (transitive) member of the given group,
+  /// a group-setting value.
+  ///
+  /// See also [selfInGroupSetting].
+  bool userInGroupSetting(int userId, GroupSettingValue value);
 }
 
 mixin ProxyUserGroupStore on UserGroupStore {
@@ -37,6 +43,9 @@ mixin ProxyUserGroupStore on UserGroupStore {
   @override
   bool selfInGroupSetting(GroupSettingValue value)
     => userGroupStore.selfInGroupSetting(value);
+  @override
+  bool userInGroupSetting(int userId, GroupSettingValue value)
+    => userGroupStore.userInGroupSetting(userId, value);
 }
 
 abstract class HasUserGroupStore extends PerAccountStoreBase with UserGroupStore, ProxyUserGroupStore {
@@ -73,22 +82,27 @@ class UserGroupStoreImpl extends PerAccountStoreBase with UserGroupStore {
 
   @override
   bool selfInGroupSetting(GroupSettingValue value) {
+    return userInGroupSetting(selfUserId, value);
+  }
+
+  @override
+  bool userInGroupSetting(int userId, GroupSettingValue value) {
     return switch (value) {
       GroupSettingValueNamed() =>
-        _selfInGroup(value.groupId),
+        _userInGroup(userId, value.groupId),
       GroupSettingValueNameless() =>
-        value.directMembers.contains(selfUserId)
-          || value.directSubgroups.any(_selfInGroup),
+        value.directMembers.contains(userId)
+          || value.directSubgroups.any((groupId) => _userInGroup(userId, groupId)),
     };
   }
 
-  bool _selfInGroup(int groupId) {
+  bool _userInGroup(int userId, int groupId) {
     final group = _groups[groupId];
     if (group == null) return false; // TODO(log); should know all groups
     // TODO(perf), TODO(#814): memoize which groups the self-user is in,
     //   to save doing this depth-first search on each permission check
-    return group.members.contains(selfUserId)
-      || group.directSubgroupIds.any(_selfInGroup);
+    return group.members.contains(userId)
+      || group.directSubgroupIds.any((subgroupId) => _userInGroup(userId, subgroupId));
   }
 
   final Map<int, UserGroup> _groups;
