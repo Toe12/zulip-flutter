@@ -47,16 +47,20 @@ jq --version >/dev/null 2>&1 \
     || die "Need jq -- try 'apt install jq'."
 
 
-# White Z, on transparent background.
-src_icon_foreground="${root_dir}"/assets/app-icons/zulip-white-z-on-transparent.svg
+# White mark, on transparent background.
+src_icon_foreground="${root_dir}"/assets/app-icons/basecomms-white-mark-on-transparent.svg
 
-# Gradient-colored square, full-bleed.
-src_icon_background="${root_dir}"/assets/app-icons/zulip-gradient.svg
+# Solid-colored square, full-bleed.
+src_icon_background="${root_dir}"/assets/app-icons/basecomms-background.svg
 
 # Combination of ${src_icon_foreground} upon ${src_icon_background}...
 # more or less.  (The foreground layer is larger, with less padding,
 # and the SVG is different in random other ways.)
-src_icon_combined="${root_dir}"/assets/app-icons/zulip-combined.svg
+src_icon_combined="${root_dir}"/assets/app-icons/basecomms-combined.svg
+
+# White mark, on transparent background, for the Android notification
+# small icon, which the system draws as a single-colored silhouette.
+src_icon_notification="${root_dir}"/assets/app-icons/basecomms-notification.svg
 
 
 make_one_ios_app_icon() {
@@ -151,6 +155,10 @@ make_android() {
     #   https://developer.android.com/training/multiscreen/screendensities#mipmap
     make_android_icon "${src_icon_background}" 108 main mipmap ic_launcher_background
     make_android_icon "${src_icon_foreground}" 48 main mipmap ic_launcher_monochrome
+
+    # Notification icons go into drawables.  The name is kept as it was,
+    # because it appears in keep.xml and in the notification code.
+    make_android_icon "${src_icon_notification}" 24 main drawable zulip_notification
 }
 
 make_ios
