@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:checks/checks.dart';
 import 'package:collection/collection.dart';
 import 'package:test/scaffolding.dart';
@@ -89,6 +91,38 @@ void main() {
       await store.handleEvent(SubscriptionAddEvent(id: 1,
         subscriptions: [eg.subscription(stream)]));
       checkUnified(store);
+    });
+  });
+
+  group('canAdministerChannelGroup', () {
+    test('parsed from JSON; absent from an older server', () {
+      final group = eg.groupSetting(members: [eg.otherUser.userId]);
+      final json = jsonDecode(jsonEncode(
+        eg.stream(canAdministerChannelGroup: group))) as Map<String, dynamic>;
+
+      final parsed = ZulipStream.fromJson(json).canAdministerChannelGroup;
+      check(parsed).isA<GroupSettingValueNameless>();
+      check((parsed as GroupSettingValueNameless).directMembers)
+        .deepEquals([eg.otherUser.userId]);
+
+      json.remove('can_administer_channel_group');
+      check(ZulipStream.fromJson(json).canAdministerChannelGroup).isNull();
+    });
+
+    test('updated by event', () async {
+      final stream = eg.stream();
+      final store = eg.store();
+      await store.addStream(stream);
+      await store.addSubscription(eg.subscription(stream));
+
+      final newGroup = eg.groupSetting(members: [eg.selfUser.userId]);
+      await store.handleEvent(eg.channelUpdateEvent(store.streams[stream.streamId]!,
+        property: ChannelPropertyName.canAdministerChannelGroup, value: newGroup));
+
+      check(store.streams[stream.streamId]!.canAdministerChannelGroup)
+        .identicalTo(newGroup);
+      check(store.subscriptions[stream.streamId]!.canAdministerChannelGroup)
+        .identicalTo(newGroup);
     });
   });
 

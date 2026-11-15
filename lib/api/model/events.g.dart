@@ -559,6 +559,7 @@ const _$ChannelPropertyNameEnumMap = {
   ChannelPropertyName.channelPostPolicy: 'stream_post_policy',
   ChannelPropertyName.folderId: 'folder_id',
   ChannelPropertyName.canAddSubscribersGroup: 'can_add_subscribers_group',
+  ChannelPropertyName.canAdministerChannelGroup: 'can_administer_channel_group',
   ChannelPropertyName.canDeleteAnyMessageGroup: 'can_delete_any_message_group',
   ChannelPropertyName.canDeleteOwnMessageGroup: 'can_delete_own_message_group',
   ChannelPropertyName.canSendMessageGroup: 'can_send_message_group',

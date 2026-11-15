@@ -274,6 +274,9 @@ ZulipStream _$ZulipStreamFromJson(Map<String, dynamic> json) => ZulipStream(
   canAddSubscribersGroup: json['can_add_subscribers_group'] == null
       ? null
       : GroupSettingValue.fromJson(json['can_add_subscribers_group']),
+  canAdministerChannelGroup: json['can_administer_channel_group'] == null
+      ? null
+      : GroupSettingValue.fromJson(json['can_administer_channel_group']),
   canDeleteAnyMessageGroup: json['can_delete_any_message_group'] == null
       ? null
       : GroupSettingValue.fromJson(json['can_delete_any_message_group']),
@@ -306,6 +309,7 @@ Map<String, dynamic> _$ZulipStreamToJson(ZulipStream instance) =>
       'message_retention_days': instance.messageRetentionDays,
       'stream_post_policy': instance.channelPostPolicy,
       'can_add_subscribers_group': instance.canAddSubscribersGroup,
+      'can_administer_channel_group': instance.canAdministerChannelGroup,
       'can_delete_any_message_group': instance.canDeleteAnyMessageGroup,
       'can_delete_own_message_group': instance.canDeleteOwnMessageGroup,
       'can_send_message_group': instance.canSendMessageGroup,
@@ -342,6 +346,9 @@ Subscription _$SubscriptionFromJson(Map<String, dynamic> json) => Subscription(
   canAddSubscribersGroup: json['can_add_subscribers_group'] == null
       ? null
       : GroupSettingValue.fromJson(json['can_add_subscribers_group']),
+  canAdministerChannelGroup: json['can_administer_channel_group'] == null
+      ? null
+      : GroupSettingValue.fromJson(json['can_administer_channel_group']),
   canDeleteAnyMessageGroup: json['can_delete_any_message_group'] == null
       ? null
       : GroupSettingValue.fromJson(json['can_delete_any_message_group']),
@@ -382,6 +389,7 @@ Map<String, dynamic> _$SubscriptionToJson(Subscription instance) =>
       'message_retention_days': instance.messageRetentionDays,
       'stream_post_policy': instance.channelPostPolicy,
       'can_add_subscribers_group': instance.canAddSubscribersGroup,
+      'can_administer_channel_group': instance.canAdministerChannelGroup,
       'can_delete_any_message_group': instance.canDeleteAnyMessageGroup,
       'can_delete_own_message_group': instance.canDeleteOwnMessageGroup,
       'can_send_message_group': instance.canSendMessageGroup,
@@ -571,6 +579,7 @@ const _$ChannelPropertyNameEnumMap = {
   ChannelPropertyName.channelPostPolicy: 'stream_post_policy',
   ChannelPropertyName.folderId: 'folder_id',
   ChannelPropertyName.canAddSubscribersGroup: 'can_add_subscribers_group',
+  ChannelPropertyName.canAdministerChannelGroup: 'can_administer_channel_group',
   ChannelPropertyName.canDeleteAnyMessageGroup: 'can_delete_any_message_group',
   ChannelPropertyName.canDeleteOwnMessageGroup: 'can_delete_own_message_group',
   ChannelPropertyName.canSendMessageGroup: 'can_send_message_group',
