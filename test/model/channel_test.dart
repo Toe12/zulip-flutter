@@ -594,6 +594,60 @@ void main() {
     });
   });
 
+  group('userCanAdministerChannel', () {
+    // The channel's administrators: a named group holding [eg.otherUser].
+    final adminsGroup = eg.userGroup(members: [eg.otherUser.userId]);
+    final administeredChannel = eg.stream(
+      canAdministerChannelGroup: GroupSettingValueNamed(adminsGroup.id));
+    final unadministeredChannel = eg.stream(); // nobody
+
+    PerAccountStore storeFor(User selfUser) => eg.store(selfUser: selfUser,
+      initialSnapshot: eg.initialSnapshot(
+        realmUsers: [selfUser, eg.otherUser], realmUserGroups: [adminsGroup],
+        streams: [administeredChannel, unadministeredChannel]));
+
+    final testCases = [
+      // (role, in the group, administers a channel that names the group,
+      //   administers one that names nobody)
+      (UserRole.owner,         false, true,  true),
+      (UserRole.administrator, false, true,  true),
+      (UserRole.moderator,     false, false, false),
+      (UserRole.member,        false, false, false),
+      (UserRole.member,        true,  true,  false),
+      (UserRole.moderator,     true,  true,  false),
+      // A guest can't hold the permission, even when listed in the group.
+      (UserRole.guest,         true,  false, false),
+    ];
+
+    for (final (role, inGroup, administered, unadministered) in testCases) {
+      test('${role.name}${inGroup ? ' in the group' : ''}', () {
+        final user = eg.user(role: role);
+        if (inGroup) adminsGroup.members.add(user.userId);
+        addTearDown(() => adminsGroup.members.remove(user.userId));
+
+        final store = storeFor(user);
+        check(store.selfCanAdministerChannel(administeredChannel)).equals(administered);
+        check(store.selfCanAdministerChannel(unadministeredChannel)).equals(unadministered);
+        // The same answer for a user who is not the self-user.
+        final other = storeFor(eg.selfUser);
+        check(other.userCanAdministerChannel(user, administeredChannel)).equals(administered);
+      });
+    }
+
+    test('older server that does not send the setting', () {
+      final channel = eg.stream();
+      channel.canAdministerChannelGroup = null;
+      final member = eg.user(role: UserRole.member);
+      final admin = eg.user(role: UserRole.administrator);
+      final store = eg.store(selfUser: member,
+        initialSnapshot: eg.initialSnapshot(
+          realmUsers: [member, admin], streams: [channel]));
+      check(store.selfCanAdministerChannel(channel)).isFalse();
+      // Organization administrators still administer it.
+      check(store.userCanAdministerChannel(admin, channel)).isTrue();
+    });
+  });
+
   group('selfCanSendMessage', () {
     test('in group', () {
       addTearDown(testBinding.reset);

@@ -239,6 +239,39 @@ mixin ChannelStore on UserStore {
     return false;
   }
 
+  /// Whether the self-user administers [channel].
+  ///
+  /// See [userCanAdministerChannel].
+  bool selfCanAdministerChannel(ZulipStream channel) =>
+    userCanAdministerChannel(selfUser, channel);
+
+  /// Whether [user] administers [channel].
+  ///
+  /// Organization owners and administrators administer every channel.
+  /// Anyone else does so if they are in the channel's
+  /// [ZulipStream.canAdministerChannelGroup].
+  ///
+  /// Compare web's stream_data.can_administer_channel, which answers
+  /// this for the self-user.
+  bool userCanAdministerChannel(User user, ZulipStream channel) {
+    if (user.role == UserRole.owner || user.role == UserRole.administrator) {
+      return true;
+    }
+    // The permission doesn't allow the "everyone" group, so a guest
+    // is never in it.
+    if (user.role == UserRole.guest) return false;
+
+    final group = channel.canAdministerChannelGroup;
+    // An older server doesn't send the setting.  The default there is the
+    // channel's creator, which we can't tell; so nobody (but an
+    // administrator, above) is taken to administer the channel.
+    // (selfHasPermissionForGroupSetting would assume the opposite for
+    // that default, so it isn't used here.)
+    if (group == null) return false;
+
+    return userInGroupSetting(user.userId, group);
+  }
+
   bool selfCanSendMessage({
     required ZulipStream inChannel,
     required DateTime byDate,
