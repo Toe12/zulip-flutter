@@ -91,11 +91,11 @@ class ZulipLocalizationsSk extends ZulipLocalizations {
 
   @override
   String get permissionsDeniedCameraAccess =>
-      'To upload an image, please grant Zulip additional permissions in Settings.';
+      'To upload an image, please grant BaseComms additional permissions in Settings.';
 
   @override
   String get permissionsDeniedReadExternalStorage =>
-      'To upload files, please grant Zulip additional permissions in Settings.';
+      'To upload files, please grant BaseComms additional permissions in Settings.';
 
   @override
   String get actionSheetOptionSubscribe => 'Subscribe';
@@ -672,7 +672,7 @@ class ZulipLocalizationsSk extends ZulipLocalizations {
 
   @override
   String get emptyMessageListSelfDmMessage =>
-      'Use this space for personal notes, or to test out Zulip features.';
+      'Use this space for personal notes, or to test out BaseComms features.';
 
   @override
   String emptyMessageListDm(String person) {
@@ -788,7 +788,7 @@ class ZulipLocalizationsSk extends ZulipLocalizations {
   String get loginAddAnAccountPageTitle => 'Pridať účet';
 
   @override
-  String get loginRealmUrlLabel => 'Your Zulip organization URL';
+  String get loginRealmUrlLabel => 'Your BaseComms organization URL';
 
   @override
   String get loginHidePassword => 'Skryť heslo';
@@ -1372,7 +1372,7 @@ class ZulipLocalizationsSk extends ZulipLocalizations {
 
   @override
   String get experimentalFeatureSettingsWarning =>
-      'These options enable features which are still under development and not ready. They may not work, and may cause issues in other areas of the app.\n\nThe purpose of these settings is for experimentation by people working on developing Zulip.';
+      'These options enable features which are still under development and not ready. They may not work, and may cause issues in other areas of the app.\n\nThe purpose of these settings is for experimentation by people working on developing BaseComms.';
 
   @override
   String get errorNotificationOpenTitle => 'Nepodarilo sa otvoriť oznámenie';
@@ -1416,7 +1416,7 @@ class ZulipLocalizationsSk extends ZulipLocalizations {
   String get appVersionUnknownPlaceholder => '(…)';
 
   @override
-  String get zulipAppTitle => 'Zulip';
+  String get zulipAppTitle => 'BaseComms';
 
   @override
   String get topicListEmptyPlaceholderHeader => 'There are no topics here yet.';

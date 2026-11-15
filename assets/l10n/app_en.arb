@@ -1,5 +1,5 @@
 {
-  "aboutPageTitle": "About Zulip",
+  "aboutPageTitle": "About BaseComms",
   "@aboutPageTitle": {
     "description": "Title for About Zulip page."
   },
@@ -100,11 +100,11 @@
   "@permissionsNeededOpenSettings": {
     "description": "Button label for permissions dialog button that opens the system settings screen."
   },
-  "permissionsDeniedCameraAccess": "To upload an image, please grant Zulip additional permissions in Settings.",
+  "permissionsDeniedCameraAccess": "To upload an image, please grant BaseComms additional permissions in Settings.",
   "@permissionsDeniedCameraAccess": {
     "description": "Message for dialog asking the user to grant permissions for camera access."
   },
-  "permissionsDeniedReadExternalStorage": "To upload files, please grant Zulip additional permissions in Settings.",
+  "permissionsDeniedReadExternalStorage": "To upload files, please grant BaseComms additional permissions in Settings.",
   "@permissionsDeniedReadExternalStorage": {
     "description": "Message for dialog asking the user to grant permissions for external storage read access."
   },
@@ -505,11 +505,11 @@
       "message": {"type": "String", "example": "Invalid format"}
     }
   },
-  "errorConnectingToServerShort": "Error connecting to Zulip. Retrying…",
+  "errorConnectingToServerShort": "Error connecting to BaseComms. Retrying…",
   "@errorConnectingToServerShort": {
     "description": "Short error message for a generic unknown error connecting to the server."
   },
-  "errorConnectingToServerDetails": "Error connecting to Zulip at {serverUrl}. Will retry:\n\n{error}",
+  "errorConnectingToServerDetails": "Error connecting to BaseComms at {serverUrl}. Will retry:\n\n{error}",
   "@errorConnectingToServerDetails": {
     "description": "Dialog error message for a generic unknown error connecting to the server with details.",
     "placeholders": {
@@ -517,11 +517,11 @@
       "error": {"type": "String", "example": "Invalid format"}
     }
   },
-  "errorHandlingEventTitle": "Error handling a Zulip event. Retrying connection…",
+  "errorHandlingEventTitle": "Error handling a BaseComms event. Retrying connection…",
   "@errorHandlingEventTitle": {
     "description": "Error title on failing to handle a Zulip server event."
   },
-  "errorHandlingEventDetails": "Error handling a Zulip event from {serverUrl}; will retry.\n\nError: {error}\n\nEvent: {event}",
+  "errorHandlingEventDetails": "Error handling a BaseComms event from {serverUrl}; will retry.\n\nError: {error}\n\nEvent: {event}",
   "@errorHandlingEventDetails": {
     "description": "Error details on failing to handle a Zulip server event.",
     "placeholders": {
@@ -810,7 +810,7 @@
   "@emptyMessageListSelfDmHeader": {
     "description": "Placeholder for the self-DM page when there are no messages."
   },
-  "emptyMessageListSelfDmMessage": "Use this space for personal notes, or to test out Zulip features.",
+  "emptyMessageListSelfDmMessage": "Use this space for personal notes, or to test out BaseComms features.",
   "@emptyMessageListSelfDmMessage": {
     "description": "Extra detail in the placeholder for the self-DM page when there are no messages."
   },
@@ -954,7 +954,7 @@
   "@loginAddAnAccountPageTitle": {
     "description": "Title for page to add a Zulip account."
   },
-  "loginRealmUrlLabel": "Your Zulip organization URL",
+  "loginRealmUrlLabel": "Your BaseComms organization URL",
   "@loginRealmUrlLabel": {
     "description": "Label in login page for Zulip realm/org URL entry."
   },
@@ -1646,7 +1646,7 @@
   "@experimentalFeatureSettingsPageTitle": {
     "description": "Title of settings page for experimental, in-development features"
   },
-  "experimentalFeatureSettingsWarning": "These options enable features which are still under development and not ready. They may not work, and may cause issues in other areas of the app.\n\nThe purpose of these settings is for experimentation by people working on developing Zulip.",
+  "experimentalFeatureSettingsWarning": "These options enable features which are still under development and not ready. They may not work, and may cause issues in other areas of the app.\n\nThe purpose of these settings is for experimentation by people working on developing BaseComms.",
   "@experimentalFeatureSettingsWarning": {
     "description": "Warning text on settings page for experimental, in-development features"
   },
@@ -1702,9 +1702,9 @@
   "@appVersionUnknownPlaceholder": {
     "description": "Placeholder to show in place of the app version when it is unknown."
   },
-  "zulipAppTitle": "Zulip",
+  "zulipAppTitle": "BaseComms",
   "@zulipAppTitle": {
-    "description": "The name of Zulip. This should be either 'Zulip' or a transliteration."
+    "description": "The name of the app. This should be either 'BaseComms' or a transliteration."
   },
   "topicListEmptyPlaceholderHeader": "There are no topics here yet.",
   "@topicListEmptyPlaceholderHeader": {

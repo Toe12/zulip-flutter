@@ -808,7 +808,7 @@ class ZulipLocalizationsDe extends ZulipLocalizations {
   String get loginAddAnAccountPageTitle => 'Account hinzufügen';
 
   @override
-  String get loginRealmUrlLabel => 'Your Zulip organization URL';
+  String get loginRealmUrlLabel => 'Your BaseComms organization URL';
 
   @override
   String get loginHidePassword => 'Passwort verstecken';

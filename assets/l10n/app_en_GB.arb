@@ -9,6 +9,6 @@
     "description": "Topic validation error when topic is required but was empty."
   },
   "aboutPageAppVersion": "App Version",
-  "aboutPageTitle": "About Zulip",
+  "aboutPageTitle": "About BaseComms",
   "topicValidationErrorMandatoryButEmpty": "Topics are required in this organisation."
 }

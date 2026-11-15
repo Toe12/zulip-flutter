@@ -802,7 +802,7 @@ class ZulipLocalizationsPl extends ZulipLocalizations {
   String get loginAddAnAccountPageTitle => 'Dodaj konto';
 
   @override
-  String get loginRealmUrlLabel => 'Your Zulip organization URL';
+  String get loginRealmUrlLabel => 'Your BaseComms organization URL';
 
   @override
   String get loginHidePassword => 'Ukryj hasło';

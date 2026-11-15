@@ -42,9 +42,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>By allowing camera access, you can take photos and send them in Zulip messages.</string>
+	<string>By allowing camera access, you can take photos and send them in BaseComms messages.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Choose photos from your library and send them in Zulip messages.</string>
+	<string>Choose photos from your library and send them in BaseComms messages.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>INSendMessageIntent</string>

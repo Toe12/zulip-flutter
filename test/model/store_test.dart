@@ -1117,44 +1117,44 @@ void main() {
 
       test('eventually report generic NetworkException', () {
         checkLateReported(prepareNetworkException).startsWith(
-          "Error connecting to Zulip. Retrying…\n"
-          "Error connecting to Zulip at");
+          "Error connecting to BaseComms. Retrying…\n"
+          "Error connecting to BaseComms at");
       });
 
       test('eventually report Server5xxException', () {
         checkLateReported(prepareServer5xxException).startsWith(
-          "Error connecting to Zulip. Retrying…\n"
-          "Error connecting to Zulip at");
+          "Error connecting to BaseComms. Retrying…\n"
+          "Error connecting to BaseComms at");
       });
 
       test('report MalformedServerResponseException', () {
         checkReported(prepareMalformedServerResponseException).startsWith(
-          "Error connecting to Zulip. Retrying…\n"
-          "Error connecting to Zulip at");
+          "Error connecting to BaseComms. Retrying…\n"
+          "Error connecting to BaseComms at");
       });
 
       test('report rate limit: code RATE_LIMIT_HIT', () {
         checkLateReported(prepareRateLimitExceptionCode).startsWith(
-          "Error connecting to Zulip. Retrying…\n"
-          "Error connecting to Zulip at");
+          "Error connecting to BaseComms. Retrying…\n"
+          "Error connecting to BaseComms at");
       });
 
       test('report rate limit: status 429 ZulipApiException', () {
         checkLateReported(prepareRateLimitExceptionStatus).startsWith(
-          "Error connecting to Zulip. Retrying…\n"
-          "Error connecting to Zulip at");
+          "Error connecting to BaseComms. Retrying…\n"
+          "Error connecting to BaseComms at");
       });
 
       test('report rate limit: status 429 MalformedServerResponseException', () {
         checkLateReported(prepareRateLimitExceptionMalformed).startsWith(
-          "Error connecting to Zulip. Retrying…\n"
-          "Error connecting to Zulip at");
+          "Error connecting to BaseComms. Retrying…\n"
+          "Error connecting to BaseComms at");
       });
 
       test('report generic ZulipApiException', () {
         checkReported(prepareZulipApiExceptionBadRequest).startsWith(
-          "Error connecting to Zulip. Retrying…\n"
-          "Error connecting to Zulip at");
+          "Error connecting to BaseComms. Retrying…\n"
+          "Error connecting to BaseComms at");
       });
 
       test('ignore expired queue', () {
@@ -1163,8 +1163,8 @@ void main() {
 
       test('nicely report handleEvent error', () {
         checkReported(prepareHandleEventError).matchesPattern(RegExp(
-          r"Error handling a Zulip event\. Retrying connection…\n"
-          r"Error handling a Zulip event from \S+; will retry\.\n"
+          r"Error handling a BaseComms event\. Retrying connection…\n"
+          r"Error handling a BaseComms event from \S+; will retry\.\n"
           r"\n"
           r"Error: .*channel\.dart.. Failed assertion.*"
         ));

@@ -803,7 +803,7 @@ class ZulipLocalizationsUk extends ZulipLocalizations {
   String get loginAddAnAccountPageTitle => 'Додати обліковий запис';
 
   @override
-  String get loginRealmUrlLabel => 'Your Zulip organization URL';
+  String get loginRealmUrlLabel => 'Your BaseComms organization URL';
 
   @override
   String get loginHidePassword => 'Приховати пароль';
