@@ -1826,6 +1826,12 @@ abstract class ZulipLocalizations {
   /// **'Unknown'**
   String get userRoleUnknown;
 
+  /// Accessibility label for the badge on the avatar of a message's sender, when they administer that channel but are not an organization administrator.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel administrator'**
+  String get channelAdministratorLabel;
+
   /// The status button label in self-user profile page when status is set.
   ///
   /// In en, this message translates to:

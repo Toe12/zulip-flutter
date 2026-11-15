@@ -1254,6 +1254,10 @@
   "@userRoleUnknown": {
     "description": "Label for UserRole.unknown"
   },
+  "channelAdministratorLabel": "Channel administrator",
+  "@channelAdministratorLabel": {
+    "description": "Accessibility label for the badge on the avatar of a message's sender, when they administer that channel but are not an organization administrator."
+  },
   "statusButtonLabelStatusSet": "Status",
   "@statusButtonLabelStatusSet": {
     "description": "The status button label in self-user profile page when status is set."

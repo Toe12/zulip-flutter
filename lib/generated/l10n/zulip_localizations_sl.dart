@@ -1092,6 +1092,9 @@ class ZulipLocalizationsSl extends ZulipLocalizations {
   String get userRoleUnknown => 'Neznano';
 
   @override
+  String get channelAdministratorLabel => 'Channel administrator';
+
+  @override
   String get statusButtonLabelStatusSet => 'Status';
 
   @override
