@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../api/model/model.dart';
 import '../api/model/narrow.dart';
+import '../api/route/messages.dart';
 import 'narrow.dart';
 import 'store.dart';
 import 'channel.dart';
@@ -133,6 +134,32 @@ class NarrowLink extends InternalLink {
   final int? nearMessageId;
 }
 
+/// A parsed link to a single message, like `/#narrow/id/123`.
+///
+/// The link doesn't say which conversation the message is in;
+/// use [resolveMessageIdLink] to find out.
+class MessageIdLink extends InternalLink {
+  MessageIdLink(this.messageId, {required super.realmUrl});
+
+  final int messageId;
+}
+
+/// Find the conversation that a [MessageIdLink]'s message is in,
+/// as a link to that conversation at that message.
+///
+/// Throws if the message doesn't exist or isn't visible to the user,
+/// or if the request fails.
+Future<NarrowLink> resolveMessageIdLink(PerAccountStore store, MessageIdLink link) async {
+  final result = await getMessage(store.connection,
+    messageId: link.messageId,
+    applyMarkdown: false,
+    allowEmptyTopicName: true);
+  return NarrowLink(
+    SendableNarrow.ofMessage(result.message, selfUserId: store.selfUserId),
+    link.messageId,
+    realmUrl: store.realmUrl);
+}
+
 /// A parsed link to an uploaded file in Zulip.
 ///
 /// The structure mirrors the data required for [getFileTemporaryUrl]:
@@ -196,7 +223,7 @@ class UserUploadLink extends InternalLink {
 InternalLink? parseInternalLink(Uri url, PerAccountStore store) {
   if (!_sameOrigin(url, store.realmUrl)) return null;
 
-  if ((url.hasEmptyPath || url.path == '/')) {
+  if (isWebAppRootPath(url)) {
     if (url.hasQuery) return null;
     if (!url.hasFragment) return null;
     // The URL is of the form `/#…` relative to the realm URL,
@@ -205,6 +232,11 @@ InternalLink? parseInternalLink(Uri url, PerAccountStore store) {
     switch (category) {
       case 'narrow':
         if (segments.isEmpty || !segments.length.isEven) return null;
+        if (segments case ['id', final operand]) {
+          final messageId = int.tryParse(operand, radix: 10);
+          if (messageId == null) return null;
+          return MessageIdLink(messageId, realmUrl: store.realmUrl);
+        }
         return _interpretNarrowSegments(segments, store);
     }
   } else if (url.path.startsWith(UserUploadLink._urlPathPrefix)) {
@@ -213,6 +245,14 @@ InternalLink? parseInternalLink(Uri url, PerAccountStore store) {
 
   return null;
 }
+
+/// Whether [url]'s path is one where a `#…` fragment names a state
+/// within the web app.
+///
+/// That is the root path, and also the login page's: a link copied from
+/// a browser that wasn't logged in carries the login page's path.
+bool isWebAppRootPath(Uri url) =>
+  url.hasEmptyPath || url.path == '/' || url.path == '/login' || url.path == '/login/';
 
 /// Check if `url` has the same origin as `realmUrl`.
 bool _sameOrigin(Uri url, Uri realmUrl) {
