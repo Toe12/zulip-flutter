@@ -136,6 +136,39 @@ void main() {
       ]);
     });
 
+    testWidgets('a link with the app\'s own scheme opens that narrow', (tester) async {
+      await prepare(tester);
+      pushedRoutes.clear();
+
+      await deliver(tester, 'basecomms://chat.example/#narrow/channel/7-general');
+
+      check(pushedRoutes).deepEquals(<Condition<Object?>>[
+        isNarrowPage(eg.selfAccount, ChannelNarrow(channel.streamId)),
+      ]);
+    });
+
+    testWidgets('a message link with the app\'s own scheme opens at that message', (tester) async {
+      final message = eg.streamMessage(id: 488, stream: channel, topic: 'hello');
+      await prepare(tester, messageToFind: message);
+      pushedRoutes.clear();
+
+      await deliver(tester, 'basecomms://chat.example/#narrow/id/488');
+
+      check(pushedRoutes).deepEquals(<Condition<Object?>>[
+        isNarrowPage(eg.selfAccount, TopicNarrow.ofMessage(message), anchor: 488),
+      ]);
+    });
+
+    testWidgets('a link with the app\'s own scheme, on a realm we have no account for, '
+        'is ignored', (tester) async {
+      await prepare(tester);
+      pushedRoutes.clear();
+
+      await deliver(tester, 'basecomms://stranger.example/#narrow/channel/7-general');
+
+      check(pushedRoutes).isEmpty();
+    });
+
     testWidgets('a link on a realm of another account '
         'switches to that account first', (tester) async {
       await prepare(tester, withOtherRealmAccount: true);
@@ -240,6 +273,17 @@ void main() {
     testWidgets('a link that launches the app starts in its account, '
         'then opens the narrow', (tester) async {
       await prepare(tester, launchedByLink: '$ownRealm#narrow/channel/7-general');
+
+      check(pushedRoutes).deepEquals(<Condition<Object?>>[
+        isHomePage(eg.selfAccount),
+        isNarrowPage(eg.selfAccount, ChannelNarrow(channel.streamId)),
+      ]);
+    });
+
+    testWidgets('a link with the app\'s own scheme that launches the app '
+        'starts in its account, then opens the narrow', (tester) async {
+      await prepare(tester,
+        launchedByLink: 'basecomms://chat.example/#narrow/channel/7-general');
 
       check(pushedRoutes).deepEquals(<Condition<Object?>>[
         isHomePage(eg.selfAccount),

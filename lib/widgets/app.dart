@@ -244,7 +244,7 @@ class _ZulipAppState extends State<ZulipApp> with WidgetsBindingObserver {
       case Uri(scheme: 'zulip', host: 'login') && var url:
         await LoginPage.handleWebAuthUrl(url);
         return true;
-      case Uri(scheme: 'http' || 'https') && var url:
+      case Uri(scheme: 'http' || 'https' || AppLink.appScheme) && var url:
         // A web link the system opened in this app instead of a browser.
         // Say we handled it even if it leads nowhere: otherwise the default
         // handling would try to push it as a named route, which has none.

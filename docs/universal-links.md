@@ -10,10 +10,10 @@ Two halves have to agree:
   `apple-app-site-association` (AASA) file at
   `https://basecomms.com/.well-known/apple-app-site-association`.
 
-The app half is in this repo.  The server half is **not deployed**;
-the files below are a draft for review.
+The app half is in this repo.  The server half is deployed on
+basecomms.com, as described below.
 
-## Server draft
+## Server
 
 ### `apple-app-site-association`
 
@@ -95,6 +95,22 @@ and run `sudo nginx -t` before reloading.
   and its origin matches the realm of one of the user's accounts; it
   switches to that account if needed, waits for the account's data,
   then pushes the narrow.
+
+## Pasted links: the `basecomms://` scheme
+
+A link typed or pasted into a browser's address bar is never handed to
+an app, whatever the AASA says.  So the web app (`web/src/open_in_app.ts`
+in the server repo) sends a phone's browser that loads a `#narrow` page on
+to the same link with this app's own scheme, once per link per tab:
+
+    https://basecomms.com/#narrow/id/488  ->  basecomms://basecomms.com/#narrow/id/488
+
+The scheme is registered in `ios/Runner/Info.plist` and
+`android/app/src/main/AndroidManifest.xml`.  `AppLink` maps such a link back
+to the `https` one and then treats it like any other, so the same checks
+apply: an account on that realm, and a narrow.  On iOS, Safari asks
+"Open in BaseComms?" the first time.  Without the app installed, the
+browser shows a "cannot open" notice, and the web app stays loaded.
 
 ## Testing on a device
 

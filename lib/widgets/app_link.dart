@@ -21,6 +21,11 @@ import 'store.dart';
 /// a browser.  We receive it as route information, or as the initial route
 /// if that is what launched the app.
 ///
+/// A browser doesn't hand a link that was typed or pasted into its address
+/// bar over to the app.  For that case the web app redirects to the same link
+/// with this app's own scheme, `basecomms://example.com/#narrow/…`, which the
+/// system does open here; see [appSchemeLinkToWebLink].
+///
 /// Only links to a narrow, or to a message, are opened; any other page of
 /// the web app, like the help center, belongs in the browser.
 abstract final class AppLink {
@@ -41,6 +46,27 @@ abstract final class AppLink {
     _lastLinkTime = null;
   }
 
+  /// The scheme of the links the web app uses to open this app.
+  static const appScheme = 'basecomms';
+
+  /// The `https` web link that the app-scheme link [url] stands for,
+  /// like `basecomms://example.com/#narrow/id/1` for
+  /// `https://example.com/#narrow/id/1`.
+  ///
+  /// A link that doesn't use [appScheme] is returned as is.
+  /// Returns null for an app-scheme link with no host.
+  static Uri? appSchemeLinkToWebLink(Uri url) {
+    if (url.scheme != appScheme) return url;
+    if (url.host.isEmpty) return null;
+    return Uri(
+      scheme: 'https',
+      host: url.host,
+      port: url.hasPort ? url.port : null,
+      path: url.path,
+      query: url.hasQuery ? url.query : null,
+      fragment: url.hasFragment ? url.fragment : null);
+  }
+
   /// Whether [url] is shaped like a link into a narrow of a web app.
   ///
   /// This only looks at the URL's own form, not at whether any account
@@ -57,8 +83,9 @@ abstract final class AppLink {
   /// This is the account whose realm has the link's origin.
   /// If several accounts are on that realm, it is the last-visited one
   /// when that is among them.
-  static Account? accountFor(GlobalStore globalStore, Uri url) {
-    if (!_isNarrowLinkShape(url)) return null;
+  static Account? accountFor(GlobalStore globalStore, Uri link) {
+    final url = appSchemeLinkToWebLink(link);
+    if (url == null || !_isNarrowLinkShape(url)) return null;
     final matching = globalStore.accounts
       .where((account) => account.realmUrl.origin == url.origin)
       .toList();
@@ -89,17 +116,18 @@ abstract final class AppLink {
     });
   }
 
-  /// Open the page that [url] is a link to, if it is a link we handle.
+  /// Open the page that [received] is a link to, if it is a link we handle.
   ///
   /// This shows the home page of the account, then waits for that account's
   /// data, which is needed to understand the narrow, and opens the narrow.
   /// If the narrow isn't one the app can open, the account's home page is
   /// what is left showing.
   ///
-  /// Does nothing if [url] isn't a link into a narrow on a realm
+  /// Does nothing if [received] isn't a link into a narrow on a realm
   /// that we have an account for.
-  static Future<void> open(Uri url) async {
-    if (!_isNarrowLinkShape(url)) return;
+  static Future<void> open(Uri received) async {
+    final url = appSchemeLinkToWebLink(received);
+    if (url == null || !_isNarrowLinkShape(url)) return;
     if (_isRepeat(url)) return;
 
     final navigator = await ZulipApp.navigator;
