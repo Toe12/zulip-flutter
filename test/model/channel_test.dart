@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:checks/checks.dart';
 import 'package:collection/collection.dart';
 import 'package:test/scaffolding.dart';
@@ -89,6 +91,38 @@ void main() {
       await store.handleEvent(SubscriptionAddEvent(id: 1,
         subscriptions: [eg.subscription(stream)]));
       checkUnified(store);
+    });
+  });
+
+  group('canAdministerChannelGroup', () {
+    test('parsed from JSON; absent from an older server', () {
+      final group = eg.groupSetting(members: [eg.otherUser.userId]);
+      final json = jsonDecode(jsonEncode(
+        eg.stream(canAdministerChannelGroup: group))) as Map<String, dynamic>;
+
+      final parsed = ZulipStream.fromJson(json).canAdministerChannelGroup;
+      check(parsed).isA<GroupSettingValueNameless>();
+      check((parsed as GroupSettingValueNameless).directMembers)
+        .deepEquals([eg.otherUser.userId]);
+
+      json.remove('can_administer_channel_group');
+      check(ZulipStream.fromJson(json).canAdministerChannelGroup).isNull();
+    });
+
+    test('updated by event', () async {
+      final stream = eg.stream();
+      final store = eg.store();
+      await store.addStream(stream);
+      await store.addSubscription(eg.subscription(stream));
+
+      final newGroup = eg.groupSetting(members: [eg.selfUser.userId]);
+      await store.handleEvent(eg.channelUpdateEvent(store.streams[stream.streamId]!,
+        property: ChannelPropertyName.canAdministerChannelGroup, value: newGroup));
+
+      check(store.streams[stream.streamId]!.canAdministerChannelGroup)
+        .identicalTo(newGroup);
+      check(store.subscriptions[stream.streamId]!.canAdministerChannelGroup)
+        .identicalTo(newGroup);
     });
   });
 
@@ -557,6 +591,60 @@ void main() {
         .equals(UserTopicVisibilityPolicy.followed);
       check(store.topicVisibilityPolicy(stream.streamId, eg.t('topic 4')))
         .equals(UserTopicVisibilityPolicy.none);
+    });
+  });
+
+  group('userCanAdministerChannel', () {
+    // The channel's administrators: a named group holding [eg.otherUser].
+    final adminsGroup = eg.userGroup(members: [eg.otherUser.userId]);
+    final administeredChannel = eg.stream(
+      canAdministerChannelGroup: GroupSettingValueNamed(adminsGroup.id));
+    final unadministeredChannel = eg.stream(); // nobody
+
+    PerAccountStore storeFor(User selfUser) => eg.store(selfUser: selfUser,
+      initialSnapshot: eg.initialSnapshot(
+        realmUsers: [selfUser, eg.otherUser], realmUserGroups: [adminsGroup],
+        streams: [administeredChannel, unadministeredChannel]));
+
+    final testCases = [
+      // (role, in the group, administers a channel that names the group,
+      //   administers one that names nobody)
+      (UserRole.owner,         false, true,  true),
+      (UserRole.administrator, false, true,  true),
+      (UserRole.moderator,     false, false, false),
+      (UserRole.member,        false, false, false),
+      (UserRole.member,        true,  true,  false),
+      (UserRole.moderator,     true,  true,  false),
+      // A guest can't hold the permission, even when listed in the group.
+      (UserRole.guest,         true,  false, false),
+    ];
+
+    for (final (role, inGroup, administered, unadministered) in testCases) {
+      test('${role.name}${inGroup ? ' in the group' : ''}', () {
+        final user = eg.user(role: role);
+        if (inGroup) adminsGroup.members.add(user.userId);
+        addTearDown(() => adminsGroup.members.remove(user.userId));
+
+        final store = storeFor(user);
+        check(store.selfCanAdministerChannel(administeredChannel)).equals(administered);
+        check(store.selfCanAdministerChannel(unadministeredChannel)).equals(unadministered);
+        // The same answer for a user who is not the self-user.
+        final other = storeFor(eg.selfUser);
+        check(other.userCanAdministerChannel(user, administeredChannel)).equals(administered);
+      });
+    }
+
+    test('older server that does not send the setting', () {
+      final channel = eg.stream();
+      channel.canAdministerChannelGroup = null;
+      final member = eg.user(role: UserRole.member);
+      final admin = eg.user(role: UserRole.administrator);
+      final store = eg.store(selfUser: member,
+        initialSnapshot: eg.initialSnapshot(
+          realmUsers: [member, admin], streams: [channel]));
+      check(store.selfCanAdministerChannel(channel)).isFalse();
+      // Organization administrators still administer it.
+      check(store.userCanAdministerChannel(admin, channel)).isTrue();
     });
   });
 

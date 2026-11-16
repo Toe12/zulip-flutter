@@ -1,12 +1,15 @@
 
 import 'package:checks/checks.dart';
 import 'package:test/scaffolding.dart';
+import 'package:zulip/api/exception.dart';
 import 'package:zulip/api/model/model.dart';
 import 'package:zulip/api/model/narrow.dart';
+import 'package:zulip/api/route/messages.dart';
 import 'package:zulip/model/internal_link.dart';
 import 'package:zulip/model/narrow.dart';
 import 'package:zulip/model/store.dart';
 
+import '../api/fake_api.dart';
 import '../example_data.dart' as eg;
 import 'binding.dart';
 import 'test_store.dart';
@@ -405,6 +408,84 @@ void main() {
     });
   });
 
+  group('parseInternalLink on a message ID link', () {
+    final streams = [eg.stream(streamId: 1, name: 'check')];
+
+    for (final (urlString, expectedId) in [
+      ('/#narrow/id/488', 488),
+      ('/#narrow/id/488/', 488),
+      ('/login/#narrow/id/488', 488),
+      ('/login#narrow/id/488', 488),
+    ]) {
+      test('accepts $urlString', () async {
+        final store = await setupStore(realmUrl: realmUrl, streams: streams);
+        final result = parseInternalLink(store.tryResolveUrl(urlString)!, store);
+        check(result).isA<MessageIdLink>()
+          ..realmUrl.equals(realmUrl)
+          ..messageId.equals(expectedId);
+      });
+    }
+
+    for (final urlString in [
+      '/#narrow/id/',
+      '/#narrow/id/abc',
+      '/#narrow/id/488/stream/1-check',
+      '/logout/#narrow/id/488',
+      '/login/?next=/#narrow/id/488',
+    ]) {
+      test('rejects $urlString', () async {
+        final store = await setupStore(realmUrl: realmUrl, streams: streams);
+        check(parseInternalLink(store.tryResolveUrl(urlString)!, store)).isNull();
+      });
+    }
+
+    test('a narrow link on the login page path is accepted', () async {
+      final store = await setupStore(realmUrl: realmUrl, streams: streams);
+      final result = parseInternalLink(
+        store.tryResolveUrl('/login/#narrow/stream/1-check')!, store);
+      check(result).isA<NarrowLink>().narrow.equals(const ChannelNarrow(1));
+    });
+  });
+
+  group('resolveMessageIdLink', () {
+    test('a channel message: its topic, at the message', () async {
+      final store = eg.store();
+      final message = eg.streamMessage(id: 488, topic: 'hello');
+      (store.connection as FakeApiConnection)
+        .prepare(json: GetMessageResult(message: message).toJson());
+
+      final result = await resolveMessageIdLink(
+        store, MessageIdLink(488, realmUrl: store.realmUrl));
+      check(result)
+        ..realmUrl.equals(store.realmUrl)
+        ..narrow.equals(TopicNarrow.ofMessage(message))
+        ..nearMessageId.equals(488);
+    });
+
+    test('a direct message: its conversation, at the message', () async {
+      final store = eg.store();
+      final message = eg.dmMessage(id: 488, from: eg.otherUser, to: [eg.selfUser]);
+      (store.connection as FakeApiConnection)
+        .prepare(json: GetMessageResult(message: message).toJson());
+
+      final result = await resolveMessageIdLink(
+        store, MessageIdLink(488, realmUrl: store.realmUrl));
+      check(result)
+        ..narrow.equals(DmNarrow.ofMessage(message, selfUserId: store.selfUserId))
+        ..nearMessageId.equals(488);
+    });
+
+    test('a message that does not exist: throws', () async {
+      final store = eg.store();
+      (store.connection as FakeApiConnection)
+        .prepare(apiException: eg.apiBadRequest());
+
+      await check(resolveMessageIdLink(
+        store, MessageIdLink(488, realmUrl: store.realmUrl)))
+        .throws<ZulipApiException>();
+    });
+  });
+
   group('decodeHashComponent', () {
     group('correctly decodes MediaWiki-style dot-encoded strings', () {
       final testCases = [
@@ -625,4 +706,9 @@ extension InternalLinkChecks on Subject<InternalLink> {
 
 extension NarrowLinkChecks on Subject<NarrowLink> {
   Subject<Narrow> get narrow => has((x) => x.narrow, 'narrow');
+  Subject<int?> get nearMessageId => has((x) => x.nearMessageId, 'nearMessageId');
+}
+
+extension MessageIdLinkChecks on Subject<MessageIdLink> {
+  Subject<int> get messageId => has((x) => x.messageId, 'messageId');
 }

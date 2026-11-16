@@ -803,7 +803,7 @@ class ZulipLocalizationsUk extends ZulipLocalizations {
   String get loginAddAnAccountPageTitle => 'Додати обліковий запис';
 
   @override
-  String get loginRealmUrlLabel => 'Your Zulip organization URL';
+  String get loginRealmUrlLabel => 'Your BaseComms organization URL';
 
   @override
   String get loginHidePassword => 'Приховати пароль';
@@ -1073,6 +1073,9 @@ class ZulipLocalizationsUk extends ZulipLocalizations {
 
   @override
   String get userRoleUnknown => 'Невідомо';
+
+  @override
+  String get channelAdministratorLabel => 'Channel administrator';
 
   @override
   String get statusButtonLabelStatusSet => 'Статус';

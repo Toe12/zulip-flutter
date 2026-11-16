@@ -133,6 +133,12 @@ ThemeData zulipThemeData(BuildContext context) {
 // As computed by Anders: https://github.com/zulip/zulip-mobile/pull/4467
 const kZulipBrandColor = Color.fromRGBO(0x64, 0x92, 0xfe, 1);
 
+/// The BaseComms brand color, an indigo.
+///
+/// This is the background of the app icon, so it is also what Android uses
+/// to tint a notification's small icon.
+const kBaseCommsBrandColor = Color.fromRGBO(0x63, 0x66, 0xf1, 1);
+
 /// Design variables, mainly from the Figma design.
 ///
 /// For how to export these from the Figma, see:

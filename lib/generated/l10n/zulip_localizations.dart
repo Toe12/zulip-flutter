@@ -153,7 +153,7 @@ abstract class ZulipLocalizations {
   /// Title for About Zulip page.
   ///
   /// In en, this message translates to:
-  /// **'About Zulip'**
+  /// **'About BaseComms'**
   String get aboutPageTitle;
 
   /// Label for Zulip app version in About Zulip page
@@ -303,13 +303,13 @@ abstract class ZulipLocalizations {
   /// Message for dialog asking the user to grant permissions for camera access.
   ///
   /// In en, this message translates to:
-  /// **'To upload an image, please grant Zulip additional permissions in Settings.'**
+  /// **'To upload an image, please grant BaseComms additional permissions in Settings.'**
   String get permissionsDeniedCameraAccess;
 
   /// Message for dialog asking the user to grant permissions for external storage read access.
   ///
   /// In en, this message translates to:
-  /// **'To upload files, please grant Zulip additional permissions in Settings.'**
+  /// **'To upload files, please grant BaseComms additional permissions in Settings.'**
   String get permissionsDeniedReadExternalStorage;
 
   /// Label in the channel action sheet for subscribing to the channel.
@@ -847,25 +847,25 @@ abstract class ZulipLocalizations {
   /// Short error message for a generic unknown error connecting to the server.
   ///
   /// In en, this message translates to:
-  /// **'Error connecting to Zulip. Retrying…'**
+  /// **'Error connecting to BaseComms. Retrying…'**
   String get errorConnectingToServerShort;
 
   /// Dialog error message for a generic unknown error connecting to the server with details.
   ///
   /// In en, this message translates to:
-  /// **'Error connecting to Zulip at {serverUrl}. Will retry:\n\n{error}'**
+  /// **'Error connecting to BaseComms at {serverUrl}. Will retry:\n\n{error}'**
   String errorConnectingToServerDetails(String serverUrl, String error);
 
   /// Error title on failing to handle a Zulip server event.
   ///
   /// In en, this message translates to:
-  /// **'Error handling a Zulip event. Retrying connection…'**
+  /// **'Error handling a BaseComms event. Retrying connection…'**
   String get errorHandlingEventTitle;
 
   /// Error details on failing to handle a Zulip server event.
   ///
   /// In en, this message translates to:
-  /// **'Error handling a Zulip event from {serverUrl}; will retry.\n\nError: {error}\n\nEvent: {event}'**
+  /// **'Error handling a BaseComms event from {serverUrl}; will retry.\n\nError: {error}\n\nEvent: {event}'**
   String errorHandlingEventDetails(
     String serverUrl,
     String error,
@@ -1259,7 +1259,7 @@ abstract class ZulipLocalizations {
   /// Extra detail in the placeholder for the self-DM page when there are no messages.
   ///
   /// In en, this message translates to:
-  /// **'Use this space for personal notes, or to test out Zulip features.'**
+  /// **'Use this space for personal notes, or to test out BaseComms features.'**
   String get emptyMessageListSelfDmMessage;
 
   /// Placeholder for a 1:1 DM page when there are no messages.
@@ -1457,7 +1457,7 @@ abstract class ZulipLocalizations {
   /// Label in login page for Zulip realm/org URL entry.
   ///
   /// In en, this message translates to:
-  /// **'Your Zulip organization URL'**
+  /// **'Your BaseComms organization URL'**
   String get loginRealmUrlLabel;
 
   /// Icon label for button to hide password in input form.
@@ -1825,6 +1825,12 @@ abstract class ZulipLocalizations {
   /// In en, this message translates to:
   /// **'Unknown'**
   String get userRoleUnknown;
+
+  /// Accessibility label for the badge on the avatar of a message's sender, when they administer that channel but are not an organization administrator.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel administrator'**
+  String get channelAdministratorLabel;
 
   /// The status button label in self-user profile page when status is set.
   ///
@@ -2375,7 +2381,7 @@ abstract class ZulipLocalizations {
   /// Warning text on settings page for experimental, in-development features
   ///
   /// In en, this message translates to:
-  /// **'These options enable features which are still under development and not ready. They may not work, and may cause issues in other areas of the app.\n\nThe purpose of these settings is for experimentation by people working on developing Zulip.'**
+  /// **'These options enable features which are still under development and not ready. They may not work, and may cause issues in other areas of the app.\n\nThe purpose of these settings is for experimentation by people working on developing BaseComms.'**
   String get experimentalFeatureSettingsWarning;
 
   /// Error title when notification opening fails
@@ -2456,10 +2462,10 @@ abstract class ZulipLocalizations {
   /// **'(…)'**
   String get appVersionUnknownPlaceholder;
 
-  /// The name of Zulip. This should be either 'Zulip' or a transliteration.
+  /// The name of the app. This should be either 'BaseComms' or a transliteration.
   ///
   /// In en, this message translates to:
-  /// **'Zulip'**
+  /// **'BaseComms'**
   String get zulipAppTitle;
 
   /// Header text shown when a channel has no topics.

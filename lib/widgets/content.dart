@@ -1647,6 +1647,24 @@ void _launchUrl(BuildContext context, String urlString) async {
           narrow: internalLink.narrow,
           initAnchorMessageId: internalLink.nearMessageId)));
 
+    case MessageIdLink():
+      final NarrowLink narrowLink;
+      try {
+        narrowLink = await resolveMessageIdLink(store, internalLink);
+      } catch (e) { // TODO(log)
+        if (!context.mounted) return;
+        final zulipLocalizations = ZulipLocalizations.of(context);
+        showErrorDialog(context: context,
+          title: zulipLocalizations.errorCouldNotOpenLinkTitle,
+          message: zulipLocalizations.errorCouldNotOpenLink(urlString));
+        return;
+      }
+      if (!context.mounted) return;
+      unawaited(Navigator.push(context,
+        MessageListPage.buildRoute(context: context,
+          narrow: narrowLink.narrow,
+          initAnchorMessageId: narrowLink.nearMessageId)));
+
     case UserUploadLink():
       final tempUrl = await ZulipAction.getFileTemporaryUrl(context, internalLink);
       if (!context.mounted) return null;

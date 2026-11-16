@@ -1456,6 +1456,36 @@ void main() {
 
     // TODO(#1570): test links with /near/ go to the specific message
 
+    testWidgets('message links open the message\'s conversation, at the message', (tester) async {
+      final pushedRoutes = await prepare(tester,
+        '<p><a href="/login/#narrow/id/488">message</a></p>');
+
+      final message = eg.streamMessage(id: 488, topic: 'hello');
+      connection.prepare(json: GetMessageResult(message: message).toJson());
+      connection.prepare(json: eg.newestGetMessagesResult(
+        foundOldest: true, messages: []).toJson());
+      await tapText(tester, find.text('message'));
+      await tester.pump(Duration.zero);
+      await tester.pump(Duration.zero);
+      check(testBinding.takeLaunchUrlCalls()).isEmpty();
+      check(pushedRoutes).single.isA<WidgetRoute>()
+        .page.isA<MessageListPage>()
+        ..initNarrow.equals(TopicNarrow.ofMessage(message))
+        ..initAnchorMessageId.equals(488);
+    });
+
+    testWidgets('message link to a message we cannot get: error dialog', (tester) async {
+      final pushedRoutes = await prepare(tester,
+        '<p><a href="/#narrow/id/488">message</a></p>');
+
+      connection.prepare(apiException: eg.apiBadRequest());
+      await tapText(tester, find.text('message'));
+      await tester.pump(Duration.zero);
+      check(testBinding.takeLaunchUrlCalls()).isEmpty();
+      check(pushedRoutes).every((route) => route.isA<DialogRoute<void>>());
+      checkErrorDialog(tester, expectedTitle: 'Unable to open link');
+    });
+
     testWidgets('uploaded-file links are opened with temporary authed URL', (tester) async {
       final pushedRoutes = await prepare(tester,
         '<p><a href="/user_uploads/123/ab/paper.pdf">paper.pdf</a></p>');

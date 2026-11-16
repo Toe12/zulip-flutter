@@ -771,7 +771,7 @@ class ZulipLocalizationsJa extends ZulipLocalizations {
   String get loginAddAnAccountPageTitle => 'アカウントを追加';
 
   @override
-  String get loginRealmUrlLabel => 'Your Zulip organization URL';
+  String get loginRealmUrlLabel => 'Your BaseComms organization URL';
 
   @override
   String get loginHidePassword => 'パスワードを非表示';
@@ -1032,6 +1032,9 @@ class ZulipLocalizationsJa extends ZulipLocalizations {
 
   @override
   String get userRoleUnknown => '不明';
+
+  @override
+  String get channelAdministratorLabel => 'Channel administrator';
 
   @override
   String get statusButtonLabelStatusSet => 'ステータス';

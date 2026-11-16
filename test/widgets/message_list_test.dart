@@ -34,6 +34,7 @@ import 'package:zulip/widgets/icons.dart';
 import 'package:zulip/widgets/image.dart';
 import 'package:zulip/widgets/message_list.dart';
 import 'package:zulip/widgets/page.dart';
+import 'package:zulip/widgets/role_badge.dart';
 import 'package:zulip/widgets/store.dart';
 import 'package:zulip/widgets/channel_colors.dart';
 import 'package:zulip/widgets/theme.dart';
@@ -2301,6 +2302,80 @@ void main() {
       checkUser(users[2], isBot: false);
 
       debugNetworkImageHttpClientProvider = null;
+    });
+
+    group('Role badge', () {
+      /// The badge in the sender row for [message], or null if none.
+      SenderRole? badgeFor(WidgetTester tester, Message message) {
+        final rowFinder = find.byWidgetPredicate((widget) =>
+          widget is SenderRow && (widget.message as Message).id == message.id);
+        check(rowFinder).findsOne();
+        final badgeFinder = find.descendant(
+          of: rowFinder, matching: find.byType(RoleBadge));
+        return tester.widgetList<RoleBadge>(badgeFinder).singleOrNull?.role;
+      }
+
+      testWidgets('owners and administrators are badged, others are not', (tester) async {
+        prepareBoringImageHttpClient();
+        final owner = eg.user(role: UserRole.owner);
+        final admin = eg.user(role: UserRole.administrator);
+        final moderator = eg.user(role: UserRole.moderator);
+        final member = eg.user(role: UserRole.member);
+        final users = [owner, admin, moderator, member];
+
+        final messages = [for (final user in users) eg.streamMessage(sender: user)];
+        await setupMessageListPage(tester, users: users, messages: messages);
+
+        check(badgeFor(tester, messages[0])).equals(SenderRole.owner);
+        check(badgeFor(tester, messages[1])).equals(SenderRole.administrator);
+        check(badgeFor(tester, messages[2])).isNull();
+        check(badgeFor(tester, messages[3])).isNull();
+        debugNetworkImageHttpClientProvider = null;
+      });
+
+      testWidgets('the badge is announced as the role', (tester) async {
+        final semantics = tester.ensureSemantics();
+        prepareBoringImageHttpClient();
+        final owner = eg.user(role: UserRole.owner);
+        await setupMessageListPage(tester, users: [owner],
+          messages: [eg.streamMessage(sender: owner)]);
+
+        // The label may be merged into a larger node, such as the whole
+        // tappable sender row, so look for the role name within it.
+        check(tester.getSemantics(find.byType(RoleBadge)).label).contains('Owner');
+        debugNetworkImageHttpClientProvider = null;
+        semantics.dispose();
+      });
+
+      testWidgets('a channel administrator is badged only in that channel', (tester) async {
+        prepareBoringImageHttpClient();
+        final channelAdmin = eg.user(role: UserRole.member);
+        final administered = eg.stream(canAdministerChannelGroup:
+          eg.groupSetting(members: [channelAdmin.userId]));
+        final other = eg.stream();
+
+        final inAdministered = eg.streamMessage(sender: channelAdmin, stream: administered);
+        final inOther = eg.streamMessage(sender: channelAdmin, stream: other);
+        await setupMessageListPage(tester, users: [channelAdmin],
+          subscriptions: [eg.subscription(administered), eg.subscription(other)],
+          messages: [inAdministered, inOther]);
+
+        check(badgeFor(tester, inAdministered)).equals(SenderRole.channelAdministrator);
+        check(badgeFor(tester, inOther)).isNull();
+        debugNetworkImageHttpClientProvider = null;
+      });
+
+      testWidgets('a direct message has no channel to administer', (tester) async {
+        prepareBoringImageHttpClient();
+        final member = eg.user(role: UserRole.member);
+        final message = eg.dmMessage(from: member, to: [eg.selfUser]);
+        await setupMessageListPage(tester, users: [member],
+          narrow: DmNarrow.withUser(member.userId, selfUserId: eg.selfUser.userId),
+          messages: [message]);
+
+        check(badgeFor(tester, message)).isNull();
+        debugNetworkImageHttpClientProvider = null;
+      });
     });
 
     group('User status', () {

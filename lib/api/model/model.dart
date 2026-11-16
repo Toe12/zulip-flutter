@@ -688,6 +688,7 @@ class ZulipStream {
   // final bool isAnnouncementOnly; // deprecated for `channelPostPolicy`; ignore
 
   GroupSettingValue? canAddSubscribersGroup; // TODO(server-10)
+  GroupSettingValue? canAdministerChannelGroup; // TODO(server-10)
   GroupSettingValue? canDeleteAnyMessageGroup; // TODO(server-11)
   GroupSettingValue? canDeleteOwnMessageGroup; // TODO(server-11)
   GroupSettingValue? canSendMessageGroup; // TODO(server-10)
@@ -712,6 +713,7 @@ class ZulipStream {
     required this.channelPostPolicy,
     required this.folderId,
     required this.canAddSubscribersGroup,
+    required this.canAdministerChannelGroup,
     required this.canDeleteAnyMessageGroup,
     required this.canDeleteOwnMessageGroup,
     required this.canSendMessageGroup,
@@ -737,6 +739,7 @@ class ZulipStream {
       channelPostPolicy: subscription.channelPostPolicy,
       folderId: subscription.folderId,
       canAddSubscribersGroup: subscription.canAddSubscribersGroup,
+      canAdministerChannelGroup: subscription.canAdministerChannelGroup,
       canDeleteAnyMessageGroup: subscription.canDeleteAnyMessageGroup,
       canDeleteOwnMessageGroup: subscription.canDeleteOwnMessageGroup,
       canSendMessageGroup: subscription.canSendMessageGroup,
@@ -775,6 +778,7 @@ enum ChannelPropertyName {
   channelPostPolicy,
   folderId,
   canAddSubscribersGroup,
+  canAdministerChannelGroup,
   canDeleteAnyMessageGroup,
   canDeleteOwnMessageGroup,
   canSendMessageGroup,
@@ -861,6 +865,7 @@ class Subscription extends ZulipStream {
     required super.channelPostPolicy,
     required super.folderId,
     required super.canAddSubscribersGroup,
+    required super.canAdministerChannelGroup,
     required super.canDeleteAnyMessageGroup,
     required super.canDeleteOwnMessageGroup,
     required super.canSendMessageGroup,

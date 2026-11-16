@@ -28,6 +28,7 @@ import 'icons.dart';
 import 'input.dart';
 import 'page.dart';
 import 'profile.dart';
+import 'role_badge.dart';
 import 'scrolling.dart';
 import 'sticky_header.dart';
 import 'store.dart';
@@ -2106,6 +2107,11 @@ class SenderRow extends StatelessWidget {
     final designVariables = DesignVariables.of(context);
 
     final sender = store.getUser(message.senderId);
+    final channel = switch (message.conversation) {
+      StreamConversation(:final streamId) => store.streams[streamId],
+      _ => null,
+    };
+    final senderRole = senderRoleFor(store, sender, channel);
     final timestamp = timestampStyle
       .format(message.timestamp,
         now: DateTime.now(),
@@ -2127,12 +2133,21 @@ class SenderRow extends StatelessWidget {
                   userId: message.senderId)),
               child: Row(
                 children: [
-                  Avatar(
-                    size: 32,
-                    borderRadius: 3,
-                    showPresence: false,
-                    replaceIfMuted: showAsMuted,
-                    userId: message.senderId),
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Avatar(
+                        size: 32,
+                        borderRadius: 3,
+                        showPresence: false,
+                        replaceIfMuted: showAsMuted,
+                        userId: message.senderId),
+                      if (senderRole != null)
+                        PositionedDirectional(
+                          top: -3,
+                          end: -3,
+                          child: RoleBadge(role: senderRole)),
+                    ]),
                   const SizedBox(width: 8),
                   Flexible(
                     child: Text(message is Message

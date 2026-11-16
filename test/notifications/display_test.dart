@@ -529,7 +529,7 @@ void main() {
               ..conversationTitle.equals(expectedTitle)
               ..messages.deepEquals(messageStyleMessagesChecks))
             ..number.equals(messageStyleMessages.length)
-            ..color.equals(kZulipBrandColor.argbInt)
+            ..color.equals(kBaseCommsBrandColor.argbInt)
             ..smallIconResourceName.equals('zulip_notification')
             ..extras.which((it) => it.isNotNull()
               ..deepEquals(<String, String>{
@@ -552,7 +552,7 @@ void main() {
             ..channelId.equals(NotificationChannelManager.kChannelId)
             ..contentTitle.isNull()
             ..contentText.isNull()
-            ..color.equals(kZulipBrandColor.argbInt)
+            ..color.equals(kBaseCommsBrandColor.argbInt)
             ..smallIconResourceName.equals('zulip_notification')
             ..extras.isNull()
             ..groupKey.equals(expectedGroupKey)

@@ -795,6 +795,7 @@ class ChannelUpdateEvent extends ChannelEvent {
       case ChannelPropertyName.folderId:
         return value as int?;
       case ChannelPropertyName.canAddSubscribersGroup:
+      case ChannelPropertyName.canAdministerChannelGroup:
       case ChannelPropertyName.canDeleteAnyMessageGroup:
       case ChannelPropertyName.canDeleteOwnMessageGroup:
       case ChannelPropertyName.canSendMessageGroup:

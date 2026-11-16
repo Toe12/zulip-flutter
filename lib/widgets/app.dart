@@ -11,6 +11,7 @@ import '../model/localizations.dart';
 import '../model/store.dart';
 import '../notifications/open.dart';
 import 'about_zulip.dart';
+import 'app_link.dart';
 import 'dialog.dart';
 import 'home.dart';
 import 'login.dart';
@@ -217,6 +218,15 @@ class _ZulipAppState extends State<ZulipApp> with WidgetsBindingObserver {
     }
 
     final globalStore = GlobalStoreWidget.of(context);
+
+    // If a web link into one of our realms launched the app,
+    // start in that account, and then go on to the link's page.
+    final linkAccount = AppLink.accountForLaunch(globalStore, initialRoute);
+    if (linkAccount != null) {
+      AppLink.openAfterStartup(initialRoute);
+      return [HomePage.buildRoute(accountId: linkAccount.id)];
+    }
+
     final lastVisitedAccountId = globalStore.lastVisitedAccount?.id;
 
     return [
@@ -233,6 +243,12 @@ class _ZulipAppState extends State<ZulipApp> with WidgetsBindingObserver {
     switch (routeInformation.uri) {
       case Uri(scheme: 'zulip', host: 'login') && var url:
         await LoginPage.handleWebAuthUrl(url);
+        return true;
+      case Uri(scheme: 'http' || 'https') && var url:
+        // A web link the system opened in this app instead of a browser.
+        // Say we handled it even if it leads nowhere: otherwise the default
+        // handling would try to push it as a named route, which has none.
+        unawaited(AppLink.open(url));
         return true;
     }
     return super.didPushRouteInformation(routeInformation);

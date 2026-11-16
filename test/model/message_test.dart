@@ -1306,6 +1306,79 @@ void main() {
       });
     });
 
+    group('channel administrators', () {
+      // Every other way of being allowed to delete is off, and the message
+      // is someone else's and past the time limit.  So the only thing that
+      // can allow the deletion is administering the channel.
+      Future<bool> evaluate({
+        UserRole role = UserRole.member,
+        bool inAdministerGroup = false,
+        bool serverSendsSetting = true,
+        bool isChannelArchived = false,
+        bool isDm = false,
+      }) async {
+        final selfUser = eg.user(role: role);
+        final administerGroup = eg.userGroup(
+          members: [inAdministerGroup ? selfUser.userId : eg.otherUser.userId]);
+        final withoutSelf = eg.userGroup(members: [eg.otherUser.userId]);
+        final channel = eg.stream(
+          canAdministerChannelGroup: GroupSettingValueNamed(administerGroup.id),
+          canDeleteAnyMessageGroup: GroupSettingValueNamed(withoutSelf.id),
+          canDeleteOwnMessageGroup: GroupSettingValueNamed(withoutSelf.id));
+        if (!serverSendsSetting) channel.canAdministerChannelGroup = null;
+        channel.isArchived = isChannelArchived;
+
+        final now = testBinding.utcNow();
+        final timestamp = (now.millisecondsSinceEpoch ~/ 1000) - 60;
+        final Message message = isDm
+          ? eg.dmMessage(from: eg.otherUser, to: [selfUser], timestamp: timestamp)
+          : eg.streamMessage(sender: eg.otherUser, stream: channel, timestamp: timestamp);
+
+        final store = eg.store(
+          selfUser: selfUser,
+          initialSnapshot: eg.initialSnapshot(
+            realmUsers: [selfUser, eg.otherUser],
+            streams: [channel],
+            realmUserGroups: [administerGroup, withoutSelf],
+            realmCanDeleteAnyMessageGroup: GroupSettingValueNamed(withoutSelf.id),
+            realmCanDeleteOwnMessageGroup: GroupSettingValueNamed(withoutSelf.id),
+            realmMessageContentDeleteLimitSeconds: 1));
+        await store.addMessage(message);
+        return store.selfCanDeleteMessage(message.id, atDate: now);
+      }
+
+      test('a member of the channel\'s administer group can', () async {
+        check(await evaluate(inAdministerGroup: true)).isTrue();
+      });
+
+      test('another member cannot', () async {
+        check(await evaluate()).isFalse();
+      });
+
+      test('an organization administrator or owner can, in any channel', () async {
+        check(await evaluate(role: UserRole.administrator)).isTrue();
+        check(await evaluate(role: UserRole.owner)).isTrue();
+      });
+
+      test('a guest in the group cannot', () async {
+        check(await evaluate(role: UserRole.guest, inAdministerGroup: true)).isFalse();
+      });
+
+      test('an older server that does not send the setting: a member cannot', () async {
+        check(await evaluate(serverSendsSetting: false)).isFalse();
+      });
+
+      test('not in an archived channel', () async {
+        check(await evaluate(inAdministerGroup: true, isChannelArchived: true)).isFalse();
+        check(await evaluate(role: UserRole.owner, isChannelArchived: true)).isFalse();
+      });
+
+      test('not a direct message, which is no channel\'s', () async {
+        check(await evaluate(inAdministerGroup: true, isDm: true)).isFalse();
+        check(await evaluate(role: UserRole.administrator, isDm: true)).isFalse();
+      });
+    });
+
     group('legacy behavior', () {
       group('pre-407', () {
         // The channel-level group permissions don't exist,

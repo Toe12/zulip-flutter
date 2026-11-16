@@ -93,11 +93,11 @@ class ZulipLocalizationsEt extends ZulipLocalizations {
 
   @override
   String get permissionsDeniedCameraAccess =>
-      'To upload an image, please grant Zulip additional permissions in Settings.';
+      'To upload an image, please grant BaseComms additional permissions in Settings.';
 
   @override
   String get permissionsDeniedReadExternalStorage =>
-      'To upload files, please grant Zulip additional permissions in Settings.';
+      'To upload files, please grant BaseComms additional permissions in Settings.';
 
   @override
   String get actionSheetOptionSubscribe => 'Telli';
@@ -431,16 +431,16 @@ class ZulipLocalizationsEt extends ZulipLocalizations {
 
   @override
   String get errorConnectingToServerShort =>
-      'Error connecting to Zulip. Retrying…';
+      'Error connecting to BaseComms. Retrying…';
 
   @override
   String errorConnectingToServerDetails(String serverUrl, String error) {
-    return 'Error connecting to Zulip at $serverUrl. Will retry:\n\n$error';
+    return 'Error connecting to BaseComms at $serverUrl. Will retry:\n\n$error';
   }
 
   @override
   String get errorHandlingEventTitle =>
-      'Error handling a Zulip event. Retrying connection…';
+      'Error handling a BaseComms event. Retrying connection…';
 
   @override
   String errorHandlingEventDetails(
@@ -448,7 +448,7 @@ class ZulipLocalizationsEt extends ZulipLocalizations {
     String error,
     String event,
   ) {
-    return 'Error handling a Zulip event from $serverUrl; will retry.\n\nError: $error\n\nEvent: $event';
+    return 'Error handling a BaseComms event from $serverUrl; will retry.\n\nError: $error\n\nEvent: $event';
   }
 
   @override
@@ -675,7 +675,7 @@ class ZulipLocalizationsEt extends ZulipLocalizations {
 
   @override
   String get emptyMessageListSelfDmMessage =>
-      'Use this space for personal notes, or to test out Zulip features.';
+      'Use this space for personal notes, or to test out BaseComms features.';
 
   @override
   String emptyMessageListDm(String person) {
@@ -791,7 +791,7 @@ class ZulipLocalizationsEt extends ZulipLocalizations {
   String get loginAddAnAccountPageTitle => 'Add an account';
 
   @override
-  String get loginRealmUrlLabel => 'Your Zulip organization URL';
+  String get loginRealmUrlLabel => 'Your BaseComms organization URL';
 
   @override
   String get loginHidePassword => 'Peida salasõna';
@@ -1057,6 +1057,9 @@ class ZulipLocalizationsEt extends ZulipLocalizations {
 
   @override
   String get userRoleUnknown => 'Teadmata';
+
+  @override
+  String get channelAdministratorLabel => 'Channel administrator';
 
   @override
   String get statusButtonLabelStatusSet => 'Olek';
@@ -1370,7 +1373,7 @@ class ZulipLocalizationsEt extends ZulipLocalizations {
 
   @override
   String get experimentalFeatureSettingsWarning =>
-      'These options enable features which are still under development and not ready. They may not work, and may cause issues in other areas of the app.\n\nThe purpose of these settings is for experimentation by people working on developing Zulip.';
+      'These options enable features which are still under development and not ready. They may not work, and may cause issues in other areas of the app.\n\nThe purpose of these settings is for experimentation by people working on developing BaseComms.';
 
   @override
   String get errorNotificationOpenTitle => 'Failed to open notification';

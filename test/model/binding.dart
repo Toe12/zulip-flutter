@@ -299,6 +299,12 @@ class TestZulipBinding extends ZulipBinding {
     _firebaseInitialized = true;
   }
 
+  @override
+  Future<void> firebaseInitializeAppCheck() async {}
+
+  @override
+  Future<String?> getAppCheckToken() async => null;
+
   /// The value `firebaseMessaging.getToken` will initialize the token to.
   ///
   /// After `firebaseMessaging.getToken` has been called once, this has no effect.
@@ -348,7 +354,7 @@ class TestZulipBinding extends ZulipBinding {
   /// The value that `ZulipBinding.instance.pickFiles()` should return.
   ///
   /// See also [takePickFilesCalls].
-  FilePickerResult? pickFilesResult;
+  List<PlatformFile>? pickFilesResult;
 
   void _resetPickFiles() {
     pickFilesResult = null;
@@ -362,29 +368,17 @@ class TestZulipBinding extends ZulipBinding {
   /// either this method or [reset].
   ///
   /// See also [pickFilesResult].
-  List<({
-    bool? allowMultiple,
-    bool? withReadStream,
-    FileType? type,
-  })> takePickFilesCalls() {
+  List<({FileType? type})> takePickFilesCalls() {
     final result = _pickFilesCalls;
     _pickFilesCalls = null;
     return result ?? [];
   }
-  List<({
-    bool? allowMultiple,
-    bool? withReadStream,
-    FileType? type,
-  })>? _pickFilesCalls;
+  List<({FileType? type})>? _pickFilesCalls;
 
   @override
-  Future<FilePickerResult?> pickFiles({
-    bool? allowMultiple,
-    bool? withReadStream,
-    FileType? type,
-  }) async {
-    (_pickFilesCalls ??= []).add((allowMultiple: allowMultiple, withReadStream: withReadStream, type: type));
-    return pickFilesResult;
+  Future<List<PlatformFile>> pickFiles({FileType type = FileType.any}) async {
+    (_pickFilesCalls ??= []).add((type: type));
+    return pickFilesResult ?? [];
   }
 
   /// The value that `ZulipBinding.instance.pickImage()` should return.
@@ -637,7 +631,8 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
     StreamController<String>.broadcast();
 
   @override
-  Future<String?> getToken({String? vapidKey}) async {
+  Future<String?> getToken({String? serviceWorkerScriptPath, String? vapidKey}) async {
+    assert(serviceWorkerScriptPath == null);
     assert(vapidKey == null);
     if (_token == null) {
       assert(_initialToken != null,

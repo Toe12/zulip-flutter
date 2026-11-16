@@ -697,7 +697,7 @@ class ZulipLocalizationsSl extends ZulipLocalizations {
 
   @override
   String get emptyMessageListSelfDmMessage =>
-      'Use this space for personal notes, or to test out Zulip features.';
+      'Use this space for personal notes, or to test out BaseComms features.';
 
   @override
   String emptyMessageListDm(String person) {
@@ -813,7 +813,7 @@ class ZulipLocalizationsSl extends ZulipLocalizations {
   String get loginAddAnAccountPageTitle => 'Dodaj račun';
 
   @override
-  String get loginRealmUrlLabel => 'Your Zulip organization URL';
+  String get loginRealmUrlLabel => 'Your BaseComms organization URL';
 
   @override
   String get loginHidePassword => 'Skrij geslo';
@@ -1090,6 +1090,9 @@ class ZulipLocalizationsSl extends ZulipLocalizations {
 
   @override
   String get userRoleUnknown => 'Neznano';
+
+  @override
+  String get channelAdministratorLabel => 'Channel administrator';
 
   @override
   String get statusButtonLabelStatusSet => 'Status';
