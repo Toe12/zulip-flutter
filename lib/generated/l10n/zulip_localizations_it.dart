@@ -1355,6 +1355,43 @@ class ZulipLocalizationsIt extends ZulipLocalizations {
       'Questo sondaggio non ha ancora opzioni.';
 
   @override
+  String get todoWidgetTitleMissing => 'Task list';
+
+  @override
+  String get todoWidgetTasksMissing => 'This to-do list has no tasks yet.';
+
+  @override
+  String todoWidgetAssignedTo(String name) {
+    return 'Assigned to $name';
+  }
+
+  @override
+  String get todoWidgetTaskInProgress => 'in progress';
+
+  @override
+  String get todoWidgetStartTask => 'Start';
+
+  @override
+  String get todoWidgetResetTask => 'Back to pending';
+
+  @override
+  String get todoWidgetUncheckRestricted =>
+      'Only the author of the list can uncheck this task.';
+
+  @override
+  String get todoWidgetMustStartFirst =>
+      'The task must be started before it can be checked off.';
+
+  @override
+  String get errorTodoUpdateFailedTitle => 'Failed to update task';
+
+  @override
+  String get actionSheetOptionTranslate => 'Translate';
+
+  @override
+  String get actionSheetOptionShowOriginal => 'Show original';
+
+  @override
   String get initialAnchorSettingTitle => 'Apri i feed dei messaggi su';
 
   @override

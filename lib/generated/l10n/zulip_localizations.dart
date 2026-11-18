@@ -2306,6 +2306,72 @@ abstract class ZulipLocalizations {
   /// **'This poll has no options yet.'**
   String get pollWidgetOptionsMissing;
 
+  /// Text to display as a to-do list's title when it has none
+  ///
+  /// In en, this message translates to:
+  /// **'Task list'**
+  String get todoWidgetTitleMissing;
+
+  /// Text to display for a to-do list when it has no tasks
+  ///
+  /// In en, this message translates to:
+  /// **'This to-do list has no tasks yet.'**
+  String get todoWidgetTasksMissing;
+
+  /// Text below a to-do list's title naming the user it is assigned to.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to {name}'**
+  String todoWidgetAssignedTo(String name);
+
+  /// Label on a to-do task that its assignee has started.
+  ///
+  /// In en, this message translates to:
+  /// **'in progress'**
+  String get todoWidgetTaskInProgress;
+
+  /// Button for the assignee of a to-do list to start a task.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get todoWidgetStartTask;
+
+  /// Tooltip of the button for the author of a to-do list to take a task back to pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to pending'**
+  String get todoWidgetResetTask;
+
+  /// Message shown when tapping a checked-off task one can't uncheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the author of the list can uncheck this task.'**
+  String get todoWidgetUncheckRestricted;
+
+  /// Message shown when tapping a to-do task that hasn't been started.
+  ///
+  /// In en, this message translates to:
+  /// **'The task must be started before it can be checked off.'**
+  String get todoWidgetMustStartFirst;
+
+  /// Error title when an action on a to-do task fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update task'**
+  String get errorTodoUpdateFailedTitle;
+
+  /// Label for the button on the message action sheet that shows the message translated.
+  ///
+  /// In en, this message translates to:
+  /// **'Translate'**
+  String get actionSheetOptionTranslate;
+
+  /// Label for the button on the message action sheet that goes back from a translation to the original message.
+  ///
+  /// In en, this message translates to:
+  /// **'Show original'**
+  String get actionSheetOptionShowOriginal;
+
   /// Title of setting controlling initial anchor of message list.
   ///
   /// In en, this message translates to:

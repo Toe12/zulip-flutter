@@ -2351,7 +2351,16 @@ class $$GlobalSettingsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$GlobalSettingsTable, GlobalSettingsData>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $GlobalSettingsTable,
+                    GlobalSettingsData
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -2503,7 +2512,18 @@ class $$BoolGlobalSettingsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$BoolGlobalSettingsTable, BoolGlobalSettingRow>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $BoolGlobalSettingsTable,
+                    BoolGlobalSettingRow
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -2659,7 +2679,18 @@ class $$IntGlobalSettingsTableTableManager
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
-              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .map(
+                (e) => (
+                  e.readTable<$IntGlobalSettingsTable, IntGlobalSettingRow>(
+                    table,
+                  ),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $IntGlobalSettingsTable,
+                    IntGlobalSettingRow
+                  >(db, table, e),
+                ),
+              )
               .toList(),
           prefetchHooksCallback: null,
         ),
@@ -2726,7 +2757,7 @@ final class $$AccountsTableReferences
     _$AppDatabase db,
   ) => MultiTypedResultKey.fromTable(
     db.pushKeys,
-    aliasName: $_aliasNameGenerator(db.accounts.id, db.pushKeys.accountId),
+    aliasName: 'accounts__id__push_keys__account_id',
   );
 
   $$PushKeysTableProcessedTableManager get pushKeysRefs {
@@ -3073,7 +3104,7 @@ class $$AccountsTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$AccountsTable, Account>(table),
                   $$AccountsTableReferences(db, table, e),
                 ),
               )
@@ -3086,14 +3117,19 @@ class $$AccountsTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (pushKeysRefs)
-                    await $_getPrefetchedData<Account, $AccountsTable, PushKey>(
+                    await $_getPrefetchedDataByColumns<
+                      Account,
+                      $AccountsTable,
+                      PushKey,
+                      $PushKeysTable
+                    >(
                       currentTable: table,
                       referencedTable: $$AccountsTableReferences
                           ._pushKeysRefsTable(db),
                       managerFromTypedResult: (p0) =>
                           $$AccountsTableReferences(db, table, p0).pushKeysRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where((e) => e.accountId == item.id),
+                      currentColumn: 'id',
+                      referencedColumn: 'account_id',
                       typedResults: items,
                     ),
                 ];
@@ -3141,8 +3177,8 @@ final class $$PushKeysTableReferences
     extends BaseReferences<_$AppDatabase, $PushKeysTable, PushKey> {
   $$PushKeysTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $AccountsTable _accountIdTable(_$AppDatabase db) => db.accounts
-      .createAlias($_aliasNameGenerator(db.pushKeys.accountId, db.accounts.id));
+  static $AccountsTable _accountIdTable(_$AppDatabase db) =>
+      db.accounts.createAlias('push_keys__account_id__accounts__id');
 
   $$AccountsTableProcessedTableManager get accountId {
     final $_column = $_itemColumn<int>('account_id')!;
@@ -3375,7 +3411,7 @@ class $$PushKeysTableTableManager
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
-                  e.readTable(table),
+                  e.readTable<$PushKeysTable, PushKey>(table),
                   $$PushKeysTableReferences(db, table, e),
                 ),
               )
