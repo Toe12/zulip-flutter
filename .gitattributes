@@ -30,3 +30,6 @@ test/model/schemas/*.json -diff
 # Treat SVG files as binary.  They're XML, but typically
 # generated from a GUI editor and unenlightening to read.
 *.svg binary
+
+# Shell scripts must keep LF line endings, even where Git converts to CRLF.
+*.sh text eol=lf

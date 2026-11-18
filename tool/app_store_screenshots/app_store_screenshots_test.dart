@@ -2,11 +2,11 @@
 // sample data, at the exact pixel sizes App Store Connect asks for.
 //
 // This is not part of the regular test suite (it lives outside `test/`).
-// Run it with:
+// Run `tool/app_store_screenshots/generate.sh`, which also removes the
+// alpha channel that App Store Connect does not accept, and find the
+// PNG files in `build/app_store_screenshots/`.
 //
-//   flutter test tool/app_store_screenshots/app_store_screenshots_test.dart
-//
-// and find the PNG files in `build/app_store_screenshots/`, or in the
+// To run just this file, use `flutter test` on it; it writes to the
 // directory named by the SCREENSHOT_DIR environment variable.
 import 'dart:io';
 import 'dart:ui' as ui;
