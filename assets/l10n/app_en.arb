@@ -15,6 +15,14 @@
   "@aboutPageTapToView": {
     "description": "Item subtitle in About Zulip page to navigate to Licenses page"
   },
+  "aboutPageBasedOnZulip": "Based on Zulip",
+  "@aboutPageBasedOnZulip": {
+    "description": "Item title in About page, crediting the open-source project that this app is based on."
+  },
+  "aboutPageBasedOnZulipDescription": "Open-source team chat, under the Apache License 2.0. Tap to learn more.",
+  "@aboutPageBasedOnZulipDescription": {
+    "description": "Item subtitle in About page, below the credit for the project that this app is based on; tapping opens that project's website."
+  },
   "upgradeWelcomeDialogTitle": "Welcome to the new Zulip app!",
   "@upgradeWelcomeDialogTitle": {
     "description": "Title for dialog shown on first upgrade from the legacy Zulip app."

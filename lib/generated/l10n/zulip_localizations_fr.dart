@@ -21,6 +21,13 @@ class ZulipLocalizationsFr extends ZulipLocalizations {
   String get aboutPageTapToView => 'Tapotez pour voir';
 
   @override
+  String get aboutPageBasedOnZulip => 'Based on Zulip';
+
+  @override
+  String get aboutPageBasedOnZulipDescription =>
+      'Open-source team chat, under the Apache License 2.0. Tap to learn more.';
+
+  @override
   String get upgradeWelcomeDialogTitle =>
       'Bienvenue dans la nouvelle application Zulip !';
 
