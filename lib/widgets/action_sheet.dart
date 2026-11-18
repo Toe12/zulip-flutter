@@ -16,6 +16,7 @@ import '../model/binding.dart';
 import '../model/content.dart';
 import '../model/emoji.dart';
 import '../model/internal_link.dart';
+import '../model/message_translation.dart';
 import '../model/narrow.dart';
 import 'actions.dart';
 import 'button.dart';
@@ -28,6 +29,7 @@ import 'emoji_reaction.dart';
 import 'icons.dart';
 import 'inset_shadow.dart';
 import 'message_list.dart';
+import 'message_translation.dart';
 import 'page.dart';
 import 'profile.dart';
 import 'read_receipts.dart';
@@ -1266,6 +1268,7 @@ void showMessageActionSheet({required BuildContext context, required Message mes
       if (isSenderMuted)
         // The message must have been revealed in order to open this action sheet.
         UnrevealMutedMessageButton(message: message, pageContext: pageContext),
+      TranslateButton(message: message, pageContext: pageContext),
       CopyMessageTextButton(message: message, pageContext: pageContext),
       CopyMessageLinkButton(message: message, pageContext: pageContext),
       ShareButton(message: message, pageContext: pageContext),
@@ -1350,7 +1353,8 @@ bool _getShouldShowEditButton(BuildContext pageContext, Message message) {
     && store.realmAllowMessageEditing
     && !outsideEditLimit
     && !editMessageInProgress
-    && message.poll == null; // messages with polls cannot be edited
+    && message.poll == null // messages with polls cannot be edited
+    && message.todoList == null; // nor can messages with to-do lists
 }
 
 class ReactionButtons extends StatelessWidget {
@@ -1671,6 +1675,27 @@ class UnrevealMutedMessageButton extends MessageActionSheetMenuItemButton {
     assert(MessageListPage.maybeRevealedMutedMessagesOf(pageContext)!
       .isMutedMessageRevealed(message.id));
     findMessageListPage().unrevealMutedMessage(message.id);
+  }
+}
+
+/// Show the message translated, or back to the original if it already is.
+class TranslateButton extends MessageActionSheetMenuItemButton {
+  TranslateButton({super.key, required super.message, required super.pageContext});
+
+  @override IconData get icon => ZulipIcons.language;
+
+  bool get _isTranslated =>
+    PerAccountStoreWidget.of(pageContext).messageTranslations[message.id] != null;
+
+  @override
+  String label(ZulipLocalizations zulipLocalizations) {
+    return _isTranslated
+      ? zulipLocalizations.actionSheetOptionShowOriginal
+      : zulipLocalizations.actionSheetOptionTranslate;
+  }
+
+  @override void onPressed() {
+    toggleMessageTranslation(pageContext, message);
   }
 }
 

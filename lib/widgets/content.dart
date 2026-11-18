@@ -12,6 +12,7 @@ import '../api/model/permission.dart';
 import '../generated/l10n/zulip_localizations.dart';
 import '../model/content.dart';
 import '../model/internal_link.dart';
+import '../model/message_translation.dart';
 import 'actions.dart';
 import 'code_block.dart';
 import 'dialog.dart';
@@ -21,12 +22,14 @@ import 'inset_shadow.dart';
 import 'katex.dart';
 import 'lightbox.dart';
 import 'message_list.dart';
+import 'message_translation.dart';
 import 'poll.dart';
 import 'profile.dart';
 import 'scrolling.dart';
 import 'store.dart';
 import 'text.dart';
 import 'theme.dart';
+import 'todo.dart';
 
 /// A central place for styles for Zulip content (rendered Zulip Markdown).
 ///
@@ -304,13 +307,31 @@ class MessageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = this.content;
+    final translations = PerAccountStoreWidget.of(context).messageTranslations;
     return InheritedMessage(message: message,
       child: DefaultTextStyle(
         style: ContentTheme.of(context).textStylePlainParagraph,
-        child: switch (content) {
-          ZulipContent() => BlockContentList(nodes: content.nodes),
-          PollContent()  => PollWidget(messageId: message.id, poll: content.poll),
-        }));
+        child: ListenableBuilder(
+          listenable: translations,
+          builder: (context, _) {
+            final translation = translations[message.id];
+            final translatedContent = translation?.originalContent == message.content
+              ? translation?.content : null;
+            final body = switch (content) {
+              ZulipContent() => BlockContentList(
+                nodes: (translatedContent ?? content).nodes),
+              PollContent()  => PollWidget(messageId: message.id, poll: content.poll),
+              TodoContent()  => TodoWidget(messageId: message.id, todoList: content.todoList,
+                translation: translation),
+            };
+            if (translation == null) return body;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MessageTranslationBar(message: message, translation: translation),
+                body,
+              ]);
+          })));
   }
 }
 

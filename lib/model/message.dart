@@ -867,14 +867,22 @@ class MessageStoreImpl extends HasChannelStore with MessageStore, _OutboxMessage
     if (message == null) return;
 
     final poll = message.poll;
-    if (poll == null) {
-      assert(debugLog('Missing poll for submessage event:\n${jsonEncode(event)}')); // TODO(log)
+    if (poll != null) {
+      // Live-updates for polls should not rebuild the message lists.
+      // [Poll] is responsible for notifying the affected listeners.
+      poll.handleSubmessageEvent(event);
       return;
     }
 
-    // Live-updates for polls should not rebuild the message lists.
-    // [Poll] is responsible for notifying the affected listeners.
-    poll.handleSubmessageEvent(event);
+    final todoList = message.todoList;
+    if (todoList != null) {
+      // Live-updates for to-do lists should not rebuild the message lists.
+      // [TodoList] is responsible for notifying the affected listeners.
+      todoList.handleSubmessageEvent(event);
+      return;
+    }
+
+    assert(debugLog('Missing poll/to-do list for submessage event:\n${jsonEncode(event)}')); // TODO(log)
   }
 
   /// In debug mode, controls whether outbox messages should be created when

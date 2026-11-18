@@ -1598,6 +1598,56 @@
   "@pollWidgetOptionsMissing": {
     "description": "Text to display for a poll when it has no options"
   },
+  "todoWidgetTitleMissing": "Task list",
+  "@todoWidgetTitleMissing": {
+    "description": "Text to display as a to-do list's title when it has none"
+  },
+  "todoWidgetTasksMissing": "This to-do list has no tasks yet.",
+  "@todoWidgetTasksMissing": {
+    "description": "Text to display for a to-do list when it has no tasks"
+  },
+  "todoWidgetAssignedTo": "Assigned to {name}",
+  "@todoWidgetAssignedTo": {
+    "description": "Text below a to-do list's title naming the user it is assigned to.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Alice"
+      }
+    }
+  },
+  "todoWidgetTaskInProgress": "in progress",
+  "@todoWidgetTaskInProgress": {
+    "description": "Label on a to-do task that its assignee has started."
+  },
+  "todoWidgetStartTask": "Start",
+  "@todoWidgetStartTask": {
+    "description": "Button for the assignee of a to-do list to start a task."
+  },
+  "todoWidgetResetTask": "Back to pending",
+  "@todoWidgetResetTask": {
+    "description": "Tooltip of the button for the author of a to-do list to take a task back to pending."
+  },
+  "todoWidgetUncheckRestricted": "Only the author of the list can uncheck this task.",
+  "@todoWidgetUncheckRestricted": {
+    "description": "Message shown when tapping a checked-off task one can't uncheck."
+  },
+  "todoWidgetMustStartFirst": "The task must be started before it can be checked off.",
+  "@todoWidgetMustStartFirst": {
+    "description": "Message shown when tapping a to-do task that hasn't been started."
+  },
+  "errorTodoUpdateFailedTitle": "Failed to update task",
+  "@errorTodoUpdateFailedTitle": {
+    "description": "Error title when an action on a to-do task fails."
+  },
+  "actionSheetOptionTranslate": "Translate",
+  "@actionSheetOptionTranslate": {
+    "description": "Label for the button on the message action sheet that shows the message translated."
+  },
+  "actionSheetOptionShowOriginal": "Show original",
+  "@actionSheetOptionShowOriginal": {
+    "description": "Label for the button on the message action sheet that goes back from a translation to the original message."
+  },
   "initialAnchorSettingTitle": "Open message feeds at",
   "@initialAnchorSettingTitle": {
     "description": "Title of setting controlling initial anchor of message list."
