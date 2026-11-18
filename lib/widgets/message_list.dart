@@ -26,6 +26,7 @@ import 'content.dart';
 import 'emoji_reaction.dart';
 import 'icons.dart';
 import 'input.dart';
+import 'message_translation.dart';
 import 'page.dart';
 import 'profile.dart';
 import 'role_badge.dart';
@@ -2081,10 +2082,18 @@ class DateText extends StatelessWidget {
 }
 
 class SenderRow extends StatelessWidget {
-  const SenderRow({super.key, required this.message, required this.timestampStyle});
+  const SenderRow({
+    super.key,
+    required this.message,
+    required this.timestampStyle,
+    this.showTranslateButton = false,
+  });
 
   final MessageBase message;
   final MessageTimestampStyle timestampStyle;
+
+  /// Whether to offer a button to translate the message, before the timestamp.
+  final bool showTranslateButton;
 
   bool _showAsMuted(BuildContext context, PerAccountStore store) {
     final message = this.message;
@@ -2173,6 +2182,11 @@ class SenderRow extends StatelessWidget {
                     ),
                   ],
                 ]))),
+          if (showTranslateButton && message is Message)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 4),
+              child: MessageTranslateIconButton(message: message as Message,
+                color: messageListTheme.labelTime)),
           if (timestamp != null) ...[
             const SizedBox(width: 4),
             Text(timestamp,
@@ -2390,7 +2404,8 @@ class MessageWithPossibleSender extends StatelessWidget {
         child: Column(children: [
           if (item.showSender)
             SenderRow(message: message,
-              timestampStyle: MessageTimestampStyle.timeOnly),
+              timestampStyle: MessageTimestampStyle.timeOnly,
+              showTranslateButton: !showAsMuted),
           Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: localizedTextBaseline(context),

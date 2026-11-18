@@ -1346,6 +1346,43 @@ class ZulipLocalizationsEs extends ZulipLocalizations {
   String get pollWidgetOptionsMissing => 'Esta encuesta aún no tiene opciones.';
 
   @override
+  String get todoWidgetTitleMissing => 'Task list';
+
+  @override
+  String get todoWidgetTasksMissing => 'This to-do list has no tasks yet.';
+
+  @override
+  String todoWidgetAssignedTo(String name) {
+    return 'Asignada a $name';
+  }
+
+  @override
+  String get todoWidgetTaskInProgress => 'en curso';
+
+  @override
+  String get todoWidgetStartTask => 'Iniciar';
+
+  @override
+  String get todoWidgetResetTask => 'Volver a pendiente';
+
+  @override
+  String get todoWidgetUncheckRestricted =>
+      'Solo el autor de la lista puede desmarcar esta tarea.';
+
+  @override
+  String get todoWidgetMustStartFirst =>
+      'La tarea debe iniciarse antes de poder marcarla como hecha.';
+
+  @override
+  String get errorTodoUpdateFailedTitle => 'No se pudo actualizar la tarea';
+
+  @override
+  String get actionSheetOptionTranslate => 'Traducir';
+
+  @override
+  String get actionSheetOptionShowOriginal => 'Ver original';
+
+  @override
   String get initialAnchorSettingTitle => 'Abre los feeds de mensajes en';
 
   @override

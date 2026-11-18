@@ -45,6 +45,7 @@ Map<String, dynamic> _$PollWidgetDataToJson(PollWidgetData instance) =>
 
 const _$WidgetTypeEnumMap = {
   WidgetType.poll: 'poll',
+  WidgetType.todo: 'todo',
   WidgetType.unknown: 'unknown',
 };
 
@@ -64,6 +65,61 @@ Map<String, dynamic> _$PollWidgetExtraDataToJson(
   'question': instance.question,
   'options': instance.options,
 };
+
+TodoWidgetData _$TodoWidgetDataFromJson(Map<String, dynamic> json) =>
+    TodoWidgetData(
+      extraData: TodoWidgetExtraData.fromJson(
+        json['extra_data'] as Map<String, dynamic>,
+      ),
+    );
+
+Map<String, dynamic> _$TodoWidgetDataToJson(TodoWidgetData instance) =>
+    <String, dynamic>{
+      'widget_type': _$WidgetTypeEnumMap[instance.widgetType]!,
+      'extra_data': instance.extraData,
+    };
+
+TodoWidgetExtraData _$TodoWidgetExtraDataFromJson(Map<String, dynamic> json) =>
+    TodoWidgetExtraData(
+      taskListTitle: json['task_list_title'] as String? ?? '',
+      tasks:
+          (json['tasks'] as List<dynamic>?)
+              ?.map((e) => TodoTaskData.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      assignee: json['assignee'] == null
+          ? null
+          : TodoAssignee.fromJson(json['assignee'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$TodoWidgetExtraDataToJson(
+  TodoWidgetExtraData instance,
+) => <String, dynamic>{
+  'task_list_title': instance.taskListTitle,
+  'tasks': instance.tasks,
+  'assignee': instance.assignee,
+};
+
+TodoTaskData _$TodoTaskDataFromJson(Map<String, dynamic> json) => TodoTaskData(
+  task: json['task'] as String,
+  desc: json['desc'] as String,
+  deadline: json['deadline'] as String? ?? '',
+);
+
+Map<String, dynamic> _$TodoTaskDataToJson(TodoTaskData instance) =>
+    <String, dynamic>{
+      'task': instance.task,
+      'desc': instance.desc,
+      'deadline': instance.deadline,
+    };
+
+TodoAssignee _$TodoAssigneeFromJson(Map<String, dynamic> json) => TodoAssignee(
+  userId: (json['user_id'] as num).toInt(),
+  email: json['email'] as String,
+);
+
+Map<String, dynamic> _$TodoAssigneeToJson(TodoAssignee instance) =>
+    <String, dynamic>{'user_id': instance.userId, 'email': instance.email};
 
 PollNewOptionEventSubmessage _$PollNewOptionEventSubmessageFromJson(
   Map<String, dynamic> json,
@@ -101,12 +157,14 @@ Map<String, dynamic> _$PollQuestionEventSubmessageToJson(
 PollVoteEventSubmessage _$PollVoteEventSubmessageFromJson(
   Map<String, dynamic> json,
 ) => PollVoteEventSubmessage(
-  key: json['key'] as String,
-  op: $enumDecode(
-    _$PollVoteOpEnumMap,
-    json['vote'],
-    unknownValue: PollVoteOp.unknown,
-  ),
+  key: json['key'] as PollOptionKey,
+  op:
+      $enumDecodeNullable(
+        _$PollVoteOpEnumMap,
+        json['vote'],
+        unknownValue: PollVoteOp.unknown,
+      ) ??
+      PollVoteOp.unknown,
 );
 
 Map<String, dynamic> _$PollVoteEventSubmessageToJson(
@@ -121,4 +179,96 @@ const _$PollVoteOpEnumMap = {
   PollVoteOp.add: 1,
   PollVoteOp.remove: -1,
   PollVoteOp.unknown: null,
+};
+
+TodoNewTaskListTitleEventSubmessage
+_$TodoNewTaskListTitleEventSubmessageFromJson(Map<String, dynamic> json) =>
+    TodoNewTaskListTitleEventSubmessage(title: json['title'] as String);
+
+Map<String, dynamic> _$TodoNewTaskListTitleEventSubmessageToJson(
+  TodoNewTaskListTitleEventSubmessage instance,
+) => <String, dynamic>{
+  'type': _$TodoEventSubmessageTypeEnumMap[instance.type]!,
+  'title': instance.title,
+};
+
+const _$TodoEventSubmessageTypeEnumMap = {
+  TodoEventSubmessageType.newTaskListTitle: 'new_task_list_title',
+  TodoEventSubmessageType.newTask: 'new_task',
+  TodoEventSubmessageType.strike: 'strike',
+  TodoEventSubmessageType.editTask: 'edit_task',
+  TodoEventSubmessageType.startTask: 'start_task',
+  TodoEventSubmessageType.resetTask: 'reset_task',
+  TodoEventSubmessageType.unknown: 'unknown',
+};
+
+TodoNewTaskEventSubmessage _$TodoNewTaskEventSubmessageFromJson(
+  Map<String, dynamic> json,
+) => TodoNewTaskEventSubmessage(
+  key: (json['key'] as num).toInt(),
+  task: json['task'] as String,
+  desc: json['desc'] as String,
+  deadline: json['deadline'] as String? ?? '',
+  completed: json['completed'] as bool,
+);
+
+Map<String, dynamic> _$TodoNewTaskEventSubmessageToJson(
+  TodoNewTaskEventSubmessage instance,
+) => <String, dynamic>{
+  'type': _$TodoEventSubmessageTypeEnumMap[instance.type]!,
+  'key': instance.key,
+  'task': instance.task,
+  'desc': instance.desc,
+  'deadline': instance.deadline,
+  'completed': instance.completed,
+};
+
+TodoStrikeEventSubmessage _$TodoStrikeEventSubmessageFromJson(
+  Map<String, dynamic> json,
+) => TodoStrikeEventSubmessage(key: json['key'] as TodoTaskKey);
+
+Map<String, dynamic> _$TodoStrikeEventSubmessageToJson(
+  TodoStrikeEventSubmessage instance,
+) => <String, dynamic>{
+  'type': _$TodoEventSubmessageTypeEnumMap[instance.type]!,
+  'key': instance.key,
+};
+
+TodoEditTaskEventSubmessage _$TodoEditTaskEventSubmessageFromJson(
+  Map<String, dynamic> json,
+) => TodoEditTaskEventSubmessage(
+  key: json['key'] as TodoTaskKey,
+  desc: json['desc'] as String,
+  deadline: json['deadline'] as String,
+);
+
+Map<String, dynamic> _$TodoEditTaskEventSubmessageToJson(
+  TodoEditTaskEventSubmessage instance,
+) => <String, dynamic>{
+  'type': _$TodoEventSubmessageTypeEnumMap[instance.type]!,
+  'key': instance.key,
+  'desc': instance.desc,
+  'deadline': instance.deadline,
+};
+
+TodoStartTaskEventSubmessage _$TodoStartTaskEventSubmessageFromJson(
+  Map<String, dynamic> json,
+) => TodoStartTaskEventSubmessage(key: json['key'] as TodoTaskKey);
+
+Map<String, dynamic> _$TodoStartTaskEventSubmessageToJson(
+  TodoStartTaskEventSubmessage instance,
+) => <String, dynamic>{
+  'type': _$TodoEventSubmessageTypeEnumMap[instance.type]!,
+  'key': instance.key,
+};
+
+TodoResetTaskEventSubmessage _$TodoResetTaskEventSubmessageFromJson(
+  Map<String, dynamic> json,
+) => TodoResetTaskEventSubmessage(key: json['key'] as TodoTaskKey);
+
+Map<String, dynamic> _$TodoResetTaskEventSubmessageToJson(
+  TodoResetTaskEventSubmessage instance,
+) => <String, dynamic>{
+  'type': _$TodoEventSubmessageTypeEnumMap[instance.type]!,
+  'key': instance.key,
 };

@@ -1192,6 +1192,15 @@ sealed class Message<T extends Conversation> extends MessageBase<T> {
   @JsonKey(name: 'submessages', readValue: _readPoll, fromJson: Poll.fromJson, toJson: Poll.toJson)
   Poll? poll;
 
+  /// To-do list data if "submessages" describe a to-do list, `null` otherwise.
+  ///
+  /// This reads from the same "submessages" JSON field as [poll]; the
+  /// `name` below is just a distinct placeholder so json_serializable
+  /// doesn't complain about two fields sharing a JSON key, since our
+  /// custom [_readTodoList] ignores it and reads 'submessages' itself.
+  @JsonKey(name: 'todo_submessages', readValue: _readTodoList, fromJson: TodoList.fromJson, toJson: TodoList.toJson)
+  TodoList? todoList;
+
   String get type;
 
   // final List<TopicLink> topicLinks; // TODO handle
@@ -1223,10 +1232,19 @@ sealed class Message<T extends Conversation> extends MessageBase<T> {
   }
 
   static Poll? _readPoll(Map<Object?, Object?> json, String key) {
-    return Submessage.parseSubmessagesJson(
+    final result = Submessage.parseSubmessagesJson(
       json['submessages'] as List<Object?>? ?? [],
       messageSenderId: (json['sender_id'] as num).toInt(),
     );
+    return result is Poll ? result : null;
+  }
+
+  static TodoList? _readTodoList(Map<Object?, Object?> json, String key) {
+    final result = Submessage.parseSubmessagesJson(
+      json['submessages'] as List<Object?>? ?? [],
+      messageSenderId: (json['sender_id'] as num).toInt(),
+    );
+    return result is TodoList ? result : null;
   }
 
   Message({
