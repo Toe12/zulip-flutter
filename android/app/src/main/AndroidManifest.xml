@@ -47,6 +47,20 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="basecomms" />
             </intent-filter>
+            <!-- Android App Links: web links into a narrow of basecomms.com.
+                 Verified against /.well-known/assetlinks.json on that host.
+                 The system can't tell #narrow from other fragments here, so
+                 any link to these paths opens the app, which ignores one
+                 that isn't a narrow. -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="basecomms.com" />
+                <data android:path="/" />
+                <data android:path="/login" />
+                <data android:path="/login/" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
