@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../generated/l10n/zulip_localizations.dart';
 import '../model/binding.dart';
+import 'actions.dart';
 import 'page.dart';
 
 class AboutZulipPage extends StatefulWidget {
@@ -45,6 +46,11 @@ class _AboutZulipPageState extends State<AboutZulipPage> {
                   title: Text(zulipLocalizations.aboutPageAppVersion),
                   subtitle: Text(_packageInfo?.version
                     ?? zulipLocalizations.appVersionUnknownPlaceholder)),
+                ListTile(
+                  title: Text(zulipLocalizations.aboutPageBasedOnZulip),
+                  subtitle: Text(zulipLocalizations.aboutPageBasedOnZulipDescription),
+                  onTap: () => PlatformActions.launchUrl(context,
+                    Uri.parse('https://zulip.com'))),
                 ListTile(
                   title: Text(zulipLocalizations.aboutPageOpenSourceLicenses),
                   subtitle: Text(zulipLocalizations.aboutPageTapToView),

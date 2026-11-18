@@ -10,6 +10,15 @@ import 'package:flutter/services.dart';
 // remember to include the file in the asset bundle by listing its path
 // under `assets` in pubspec.yaml.
 Stream<LicenseEntry> additionalLicenses() async* {
+  // This app is a modified version of the Zulip mobile app,
+  // which is under the Apache License 2.0.
+  yield LicenseEntryWithLineBreaks(
+    ['BaseComms (based on the Zulip mobile app)'],
+    'Copyright (c) 2022 Kandra Labs, Inc., and contributors.\n\n'
+    'This app is based on the Zulip mobile app, https://github.com/zulip/zulip-flutter,\n'
+    'and has been modified.\n\n'
+    '${await rootBundle.loadString('LICENSE')}');
+
   // Alphabetic by path.
 
   yield LicenseEntryWithLineBreaks(

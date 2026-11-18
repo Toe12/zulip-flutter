@@ -174,6 +174,18 @@ abstract class ZulipLocalizations {
   /// **'Tap to view'**
   String get aboutPageTapToView;
 
+  /// Item title in About page, crediting the open-source project that this app is based on.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on Zulip'**
+  String get aboutPageBasedOnZulip;
+
+  /// Item subtitle in About page, below the credit for the project that this app is based on; tapping opens that project's website.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-source team chat, under the Apache License 2.0. Tap to learn more.'**
+  String get aboutPageBasedOnZulipDescription;
+
   /// Title for dialog shown on first upgrade from the legacy Zulip app.
   ///
   /// In en, this message translates to:

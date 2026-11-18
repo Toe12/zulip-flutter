@@ -1,5 +1,13 @@
 # Zulip Flutter
 
+> **BaseComms.**  This repository is the BaseComms mobile app, a modified
+> version of the Zulip mobile app.  It is based on Zulip, open-source team
+> chat, <https://zulip.com>, and is used under the Apache License 2.0
+> (see `LICENSE`).  "Zulip" is a trademark of Kandra Labs, Inc.; BaseComms is
+> not affiliated with or endorsed by Zulip or Kandra Labs.
+>
+> The rest of this file is the upstream README.
+
 The official Zulip app for Android and iOS, built with Flutter.
 
 This app [was launched][] as the main Zulip mobile app
